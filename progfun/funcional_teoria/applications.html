@@ -509,6 +509,103 @@
 
                 </div>
 
+                <div class="row text-justify">
+                    <div class="col-md-12">
+                        <h2 class="text-center">12. Aplicaciones en Scala</h2>
+                        <hr>
+                        
+                        <h2>Procesamiento de Big Data</h2>
+                        <p>Scala es ampliamente utilizado en el procesamiento de grandes volúmenes de datos debido a su integraci&oacute;n con Apache Spark, una poderosa plataforma para el procesamiento distribuido de datos. La programaci&oacute;n funcional en Scala permite escribir c&oacute;digo m&aacute;s limpio y eficiente para transformar y manipular datos en paralelo.</p>
+                        <p>
+                            <strong>Detalles T&eacute;cnicos:</strong>
+                            <ul>
+                                <li><strong>Distribuci&oacute;n de Datos:</strong> Apache Spark permite la distribuci&oacute;n de datos a trav&eacute;s de un cl&uacute;ster de nodos, permitiendo el procesamiento paralelo y la manipulaci&oacute;n eficiente de grandes vol&uacute;menes de datos.</li>
+                                <li><strong>Resilient Distributed Datasets (RDDs):</strong> Son estructuras de datos distribuidas que pueden ser operadas en paralelo. Los RDDs son inmutables y permiten realizar transformaciones y acciones de manera funcional.</li>
+                                <li><strong>Transformaciones:</strong> Las transformaciones son operaciones que crean un nuevo RDD a partir de un RDD existente. Ejemplos incluyen <code>map</code>, <code>filter</code>, <code>flatMap</code>, y <code>reduceByKey</code>.</li>
+                                <li><strong>Acciones:</strong> Las acciones son operaciones que devuelven un valor al controlador del programa. Ejemplos incluyen <code>collect</code>, <code>count</code>, y <code>first</code>.</li>
+                            </ul>
+                            <strong>Detalles Te&oacute;ricos:</strong>
+                            <ul>
+                                <li><strong>Inmutabilidad:</strong> Los RDDs son inmutables, lo que significa que una vez creados, no pueden ser cambiados. Cualquier operaci&oacute;n sobre un RDD retorna un nuevo RDD.</li>
+                                <li><strong>Evaluaci&oacute;n Perezosa:</strong> Spark utiliza la evaluaci&oacute;n perezosa para mejorar la eficiencia. Las transformaciones no se ejecutan inmediatamente sino que se construye un plan de ejecuci&oacute;n que se ejecuta cuando se llama a una acci&oacute;n.</li>
+                            </ul>
+                        </p>
+                        <pre><code>
+// SCALA
+import org.apache.spark.sql.SparkSession
+
+val spark = SparkSession.builder
+    .appName("Big Data Processing")
+    .getOrCreate()
+
+val data = spark.read.textFile("hdfs://path/to/data.txt")
+
+val wordCounts = data.flatMap(line => line.split(" "))
+    .map(word => (word, 1))
+    .reduceByKey(_ + _)
+
+wordCounts.collect().foreach(println)
+                        </code></pre>
+                        
+                        <h2>Desarrollo de Aplicaciones Web</h2>
+                        <p>Play Framework es un framework web que utiliza Scala y sigue los principios de la programaci&oacute;n funcional. Permite construir aplicaciones web escalables y robustas de manera sencilla.</p>
+                        <p>
+                            <strong>Detalles T&eacute;cnicos:</strong>
+                            <ul>
+                                <li><strong>MVC (Modelo-Vista-Controlador):</strong> Play Framework sigue el patr&oacute;n de dise&ntilde;o MVC, que separa la l&oacute;gica de la aplicaci&oacute;n en tres componentes principales: el modelo (datos), la vista (interfaz de usuario) y el controlador (manejo de las solicitudes).</li>
+                                <li><strong>Rutas:</strong> Las rutas en Play definen c&oacute;mo las solicitudes HTTP se mapean a los controladores. Esto se especifica en un archivo de rutas que act&uacute;a como una tabla de enrutamiento para la aplicaci&oacute;n.</li>
+                                <li><strong>Inyecci&oacute;n de Dependencias:</strong> Play Framework utiliza inyecci&oacute;n de dependencias para gestionar las dependencias entre los diferentes componentes de la aplicaci&oacute;n. Esto facilita la prueba y la modularidad del c&oacute;digo.</li>
+                            </ul>
+                            <strong>Detalles Te&oacute;ricos:</strong>
+                            <ul>
+                                <li><strong>Principio de Inversi&oacute;n de Dependencias:</strong> La inyecci&oacute;n de dependencias promueve el principio de inversi&oacute;n de dependencias, que sugiere que los m&oacute;dulos de alto nivel no deben depender de m&oacute;dulos de bajo nivel, sino de abstracciones.</li>
+                                <li><strong>Desarrollo Reactivo:</strong> Play Framework est&aacute; dise&ntilde;ado para aplicaciones web as&iacute;ncronas y no bloqueantes, siguiendo los principios del manifiesto reactivo para mejorar la escalabilidad y el rendimiento.</li>
+                            </ul>
+                        </p>
+                        <pre><code>
+// SCALA
+import play.api.mvc._
+
+class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+    def index = Action {
+    Ok("Hello, World!")
+    }
+}
+                        </code></pre>
+                        
+                        <h2>Modelado de Datos y Manipulaci&oacute;n</h2>
+                        <p>La biblioteca Cats en Scala proporciona estructuras de datos funcionales y abstracciones para trabajar con datos de manera m&aacute;s declarativa y segura.</p>
+                        <p>
+                            <strong>Detalles T&eacute;cnicos:</strong>
+                            <ul>
+                                <li><strong>Functors y Monads:</strong> Cats proporciona implementaciones de Functors y Monads, que son estructuras algebraicas utilizadas para manejar contextos y efectos secundarios de manera funcional.</li>
+                                <li><strong>Validaci&oacute;n:</strong> Cats ofrece herramientas para la validaci&oacute;n funcional, permitiendo combinar m&uacute;ltiples validaciones y manejar errores de forma funcional.</li>
+                                <li><strong>Semigroups y Monoids:</strong> Estas son estructuras algebraicas que permiten combinar valores. Un Semigroup es una estructura con una operaci&oacute;n de combinaci&oacute;n, mientras que un Monoid es un Semigroup con un elemento neutro.</li>
+                            </ul>
+                            <strong>Detalles Te&oacute;ricos:</strong>
+                            <ul>
+                                <li><strong>Programaci&oacute;n Declarativa:</strong> Cats promueve la programaci&oacute;n declarativa, donde se describe qu&eacute; hacer en lugar de c&oacute;mo hacerlo, permitiendo un c&oacute;digo m&aacute;s conciso y f&aacute;cil de razonar.</li>
+                                <li><strong>Composici&oacute;n de Funciones:</strong> La composici&oacute;n es un concepto clave en la programaci&oacute;n funcional, donde funciones peque&ntilde;as y reutilizables se combinan para formar funciones m&aacute;s complejas. Cats facilita esta composici&oacute;n a trav&eacute;s de sus abstracciones.</li>
+                            </ul>
+                        </p>
+                        <pre><code>
+// SCALA
+import cats._
+import cats.implicits._
+
+val option1: Option[Int] = Some(10)
+val option2: Option[Int] = Some(20)
+
+val result = for {
+    x <- option1
+    y <- option2
+} yield x + y
+
+println(result) // Output: Some(30)
+                        </code></pre>
+                    </div>
+                </div>
+                             
             </div>            
             <hr>
         </div>

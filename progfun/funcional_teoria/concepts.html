@@ -617,6 +617,212 @@
                 </div>
             </div>
             <div class="row">
+                <h2>Higher-Kinded Types (HKT)</h2>
+                <div class="col-md-6 text-justify">
+                    <p>
+                        Los Higher-Kinded Types (HKT) son una caracter&iacute;stica avanzada en la programaci&oacute;n funcional que permite definir tipos que aceptan otros tipos como par&aacute;metros. Esto permite una mayor abstracci&oacute;n y reutilizaci&oacute;n de c&oacute;digo en el contexto de la programaci&oacute;n funcional.
+                    </p>
+                    <h3>Definici&oacute;n de HKT</h3>
+                    <p>
+                        Un Higher-Kinded Type se define como un tipo que toma otro tipo como par&aacute;metro. Aqu&iacute; hay un ejemplo sencillo de c&oacute;mo se puede definir un HKT:
+                    </p>
+                    <pre><code>
+trait Container[F[_]] {
+    def put[A](value: A): F[A]
+    def get[A](container: F[A]): A
+}
+                    </code></pre>
+                </div>
+                <div class="col-md-6 text-justify">
+                    <h3>Ejemplo de Uso</h3>
+                    <p>
+                        Un ejemplo com&uacute;n de HKT es el uso de listas como un contenedor gen&eacute;rico. Aqu&iacute; hay un ejemplo de c&oacute;mo usar listas con una clase que implementa el trait <code>Container</code>:
+                    </p>
+                    <pre><code>
+object ListContainer extends Container[List] {
+    def put[A](value: A): List[A] = List(value)
+    def get[A](container: List[A]): A = container.head
+}
+
+val list = ListContainer.put(42)
+val value = ListContainer.get(list)  // 42
+                    </code></pre>
+                    <h3>Ventajas de HKT</h3>
+                    <p>
+                        Los HKT permiten escribir c&oacute;digo m&aacute;s gen&eacute;rico y flexible, facilitando la abstracci&oacute;n sobre diferentes tipos de contenedores y estructuras de datos. Tambi&eacute;n son fundamentales para la definici&oacute;n de estructuras de datos y patrones de dise&ntilde;o m&aacute;s avanzados en muchos lenguajes funcionales.
+                    </p>
+                    <p>
+                        <b>Ejemplo en Scala:</b>
+                        <br>
+                        En Scala, los HKT se utilizan ampliamente para definir estructuras de datos gen&eacute;ricas y patrones de dise&ntilde;o funcionales.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Monads</h2>
+                <div class="col-md-6 text-justify">
+                    <p>
+                        Una Monad es una abstracci&oacute;n que permite estructurar programas de forma modular. Las Monads permiten encadenar operaciones en contextos computacionales 
+                        como listas, opciones o futuros. Una Monad debe implementar dos operaciones: <code>flatMap</code> y <code>unit</code> (a menudo llamado <code>pure</code>).
+                    </p>
+                    <h3>Definici&oacute;n de Monad</h3>
+                    <p>
+                        Una Monad se define como una clase con los m&eacute;todos <code>flatMap</code> y <code>unit</code>. Aqu&iacute; hay un ejemplo de una Monad sencilla:
+                    </p>
+                    <pre><code>
+trait Monad[M[_]] {
+    def flatMap[A, B](value: M[A])(func: A => M[B]): M[B]
+    def unit[A](value: A): M[A]
+}
+                    </code></pre>
+                </div>
+                <div class="col-md-6 text-justify">
+                    <h3>Concatenación de Métodos</h3>
+                    <p>
+                        Una de las características más poderosas de las Monads es su capacidad para encadenar operaciones, lo que se conoce como concatenación de métodos. Esto permite construir secuencias de operaciones que se aplican una tras otra de manera limpia y manejable.
+                    </p>
+                    <h4>Ejemplo de Uso con Option Monad</h4>
+                    <p>
+                        Considere el caso de la Monad <code>Option</code>, que representa un valor que puede estar presente o no. Aquí hay un ejemplo de cómo usar <code>Option</code> para encadenar operaciones:
+                    </p>
+                    <pre><code>
+val maybeInt: Option[Int] = Some(5)
+val result: Option[String] = maybeInt
+    .flatMap(x => Some(x * 2))         // Multiplica el valor por 2
+    .flatMap(x => Some(x + 3))         // Suma 3 al resultado
+    .flatMap(x => Some(x.toString))    // Convierte el resultado a String
+
+// result es Some("13")
+                    </code></pre>
+                    <h4>Leyes de Monad</h4>
+                    <p>
+                        Las Monads deben cumplir con tres leyes: identidad izquierda, identidad derecha y asociatividad. Estas leyes aseguran que las Monads se comporten de manera predecible y consistente.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Functor</h2>
+                <div class="col-md-6 text-justify">
+                    <p>
+                        Un Functor es una abstracci&oacute;n que permite aplicar una funci&oacute;n a un valor dentro de un contexto. Los Functors se implementan con el m&eacute;todo <code>map</code>. 
+                        Un Functor debe cumplir con dos leyes: identidad y composici&oacute;n.
+                    </p>
+                    <h3>Definici&oacute;n de Functor</h3>
+                    <p>
+                        Un Functor se define como una clase con el m&eacute;todo <code>map</code>. Aqu&iacute; hay un ejemplo de un Functor sencillo:
+                    </p>
+                    <pre><code>
+trait Functor[F[_]] {
+    def map[A, B](value: F[A])(func: A => B): F[B]
+}
+                    </code></pre>
+                </div>
+                <div class="col-md-6 text-justify">
+                    <h3>Ejemplo de Uso</h3>
+                    <p>
+                        Un ejemplo com&uacute;n de un Functor es la clase <code>List</code>. Aqu&iacute; hay un ejemplo de c&oacute;mo usar <code>List</code> como un Functor:
+                    </p>
+                    <pre><code>
+val numbers = List(1, 2, 3, 4)
+val doubled = numbers.map(_ * 2)
+// doubled es List(2, 4, 6, 8)
+                    </code></pre>
+                    <h3>Leyes de Functor</h3>
+                    <p>
+                        Los Functors deben cumplir con dos leyes: la ley de identidad (map con la funci&oacute;n identidad no cambia el Functor) y la ley de composici&oacute;n (map con la composici&oacute;n de dos funciones es igual a map con la primera funci&oacute;n y luego map con la segunda).
+                    </p>
+                    <p>
+                        <b>Ejemplo en Scala:</b>
+                        <br>
+                        En Scala, los Functors son ampliamente utilizados en las colecciones y otros contextos que admiten transformaciones.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <h2>ADTs (Algebraic Data Types)</h2>
+                <div class="col-md-6 text-justify">
+                    <p>
+                        Los Tipos de Datos Algebraicos (ADTs) son una forma de definir tipos de datos compuestos. Los dos ADTs m&aacute;s comunes son los productos (casos de clase) y las sumas (jerarqu&iacute;as selladas).
+                    </p>
+                    <h3>Definici&oacute;n de ADTs</h3>
+                    <p>
+                        Un tipo de producto se define utilizando casos de clase, y un tipo de suma se define utilizando una jerarqu&iacute;a sellada. Aqu&iacute; hay un ejemplo de cada uno:
+                    </p>
+                    <h4>Tipo de Producto</h4>
+                    <pre><code>
+case class Person(name: String, age: Int)
+                    </code></pre>
+                </div>
+                <div class="col-md-6 text-justify">
+                    <h4>Tipo de Suma</h4>
+                    <pre><code>
+sealed trait Shape
+case class Circle(radius: Double) extends Shape
+case class Rectangle(width: Double, height: Double) extends Shape
+                    </code></pre>
+                    <h3>Ejemplo de Uso</h3>
+                    <p>
+                        Aqu&iacute; hay un ejemplo de c&oacute;mo usar ADTs:
+                    </p>
+                    <pre><code>
+val shape: Shape = Circle(5.0)
+shape match {
+    case Circle(r) => println(s"Circle with radius $r")
+    case Rectangle(w, h) => println(s"Rectangle with width $w and height $h")
+}
+                    </code></pre>
+                    <p>
+                        <b>Ejemplo en Scala:</b>
+                        <br>
+                        En Scala, los ADTs son fundamentales para definir estructuras de datos complejas de manera segura y expresiva.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Typeclass</h2>
+                <div class="col-md-6 text-justify">
+                    <p>
+                        Una Typeclass es un patr&oacute;n de dise&ntilde;o que permite la adici&oacute;n de nuevas funcionalidades a los tipos existentes sin modificar su c&oacute;digo. Las Typeclasses se implementan utilizando traits y la implementaci&oacute;n impl&iacute;cita de m&eacute;todos.
+                    </p>
+                    <h3>Definici&oacute;n de Typeclass</h3>
+                    <p>
+                        Una Typeclass se define como un trait con m&eacute;todos que describen las operaciones soportadas. Aqu&iacute; hay un ejemplo de una Typeclass:
+                    </p>
+                    <pre><code>
+trait Show[A] {
+    def show(value: A): String
+}
+                    </code></pre>
+                </div>
+                <div class="col-md-6 text-justify">
+                    <h3>Implementaci&oacute;n de Typeclass</h3>
+                    <p>
+                        Para implementar una Typeclass para un tipo espec&iacute;fico, se proporciona una implementaci&oacute;n impl&iacute;cita del trait. Aqu&iacute; hay un ejemplo:
+                    </p>
+                    <pre><code>
+implicit val intShow: Show[Int] = new Show[Int] {
+    def show(value: Int): String = value.toString
+}
+                    </code></pre>
+                    <h3>Uso de Typeclass</h3>
+                    <p>
+                        Para usar una Typeclass, se usa la resoluci&oacute;n impl&iacute;cita. Aqu&iacute; hay un ejemplo de c&oacute;mo usar una Typeclass:
+                    </p>
+                    <pre><code>
+def printValue[A](value: A)(implicit s: Show[A]): Unit = {
+    println(s.show(value))
+}
+printValue(123)  // "123"
+                    </code></pre>
+                    <p>
+                        <b>Ejemplo en Scala:</b>
+                        <br>
+                        En Scala, las Typeclasses son un patr&oacute;n poderoso para la extensibilidad y la abstracci&oacute;n en la programaci&oacute;n funcional.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
                 <h2>Aplicación Parcial</h2>
                 <div class="col-md-6 text-justify">
                     <p>
