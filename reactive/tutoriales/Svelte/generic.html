@@ -11,10 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-    <link
-      rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai.min.css">
   </head>
   <body class="is-preload">
     <!-- Wrapper -->
@@ -23,10 +20,7 @@
       <header id="header">
         <h1>Lenguage Svelte</h1>
         <p>
-          En esta página encontrarás una guía para entender el lenguaje <em>Svelte</em>. En algunas
-          secciones para más claridad encontrás un vista de diferencia <em>(diff)</em> para apreciar
-          mejor los conceptos. En otras, encontrarás el codigo en JavaScript plano para más
-          simplicidad.
+          En esta página encontrarás una guía para entender el lenguaje <em>Svelte</em>.
         </p>
       </header>
 
@@ -34,7 +28,7 @@
       <div id="main">
         <!-- Content -->
         <section id="content" class="main">
-          <span class="image main"><img src="images/preview-dark.png" alt="" /></span>
+          
 
           <!-- CODIGO GENERADO CON https://www.npmjs.com/package/markdown-to-html -->
           <!-- CODIGO GENERADO CON https://www.npmjs.com/package/markdown-to-html -->
@@ -56,31 +50,32 @@
             Hay un completo sistema de &#39;reactividad&#39; para mantener el DOM en sincronía con
             el estado de la aplicación, por ejemplo en respuesta a un evento.
           </p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     let count = 0;
 
     function handleClick() {
-<span class="gi">+        count += 1;</span>
+        count += 1;
     }
-&lt;/script&gt;
+&lt;/script&gt;Hello worldE
 
-<span class="gd">-&lt;button&gt;</span>
-<span class="gi">+&lt;button on:click={handleClick}&gt;</span>
+&lt;!-- &lt;button&gt; --&gt;
+&lt;button on:click={handleClick}&gt;
     Clicked {count} {count === 1 ? &#39;time&#39; : &#39;times&#39;}
 &lt;/button&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/e0d0a267a6e74280aca9f72f169d4b76?version=4.2.18" target="_blank">aquí</a>.
+        </p>
           <h2 id="declaraciones">Declaraciones</h2>
           <p>
             Las declaraciones reactivas identifican el cambio valor de una variable para actualizar
             los componentes que hacen uso de este valor. El cambio de valor se detecta a través del
             operador asignación.
           </p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     let count = 0;
-<span class="gd">-    let doubled = count * 2;</span>
-<span class="gi">+    $: doubled = count * 2;</span>
+    //let doubled = count * 2; 
+    $: doubled = count * 2;
 
     function handleClick() {
         count += 1;
@@ -92,22 +87,23 @@
 &lt;/button&gt;
 
 &lt;p&gt;{count} doubled is {doubled}&lt;/p&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
+          <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/ef1f76113ff4400eb102f2c8fb33b01c?version=4.2.18" target="_blank">aquí</a>.
+          </p>        
           <h2 id="proposiciones">Proposiciones</h2>
           <p>
             El uso de declaraciones reactivas se puede extender a bloques de código y a expresiones
             condicionales. Recordar que para que la interfaz reaccione a la interacción del usuario
             la variable debe ser reasignada.
           </p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     let count = 0;
 
-<span class="gi">+    $: if (count &gt;= 10) {</span>
-<span class="gi">+        alert(`count is dangerously high!`);</span>
-<span class="gi">+        count = 9;</span>
-<span class="gi">+    }</span>
+    $: if (count &gt;= 10) {
+        alert(`count is dangerously high!`);
+        count = 9;
+    }
 
     function handleClick() {
         count += 1;
@@ -117,10 +113,11 @@
 &lt;button on:click={handleClick}&gt;
     Clicked {count} {count === 1 ? &#39;time&#39; : &#39;times&#39;}
 &lt;/button&gt;
-</pre></div>
-
-</code></pre>
-          <h2 id="actulizando-arreglos-y-objetos">Actulizando Arreglos y objetos</h2>
+</pre></div></code></pre>
+          <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/bc92e620f82543ee87f99738954242c0?version=4.2.18" target="_blank">aquí</a>.
+          </p>       
+          <h2 id="actualizando-arreglos-y-objetos">Actualizando Arreglos y objetos</h2>
           <p>
             Los arreglos se manipulan a través de metodos como <code>slice</code>,
             <code>push</code> o <code>reduce</code> los cuales no modifican el arreglo o el objeto a
@@ -128,12 +125,12 @@
             dispara. Para solucionar esto se realiza la operación sobre el objeto usando la
             flexibilidad sintáctica de JavaScript e involucrando el operador de asignación:
           </p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     let numbers = [1, 2, 3, 4];
 
     function addNumber() {
-<span class="gd">-        numbers = [...numbers, numbers.length + 1];</span>
-<span class="gi">+        numbers.push(numbers.length + 1);</span>
+        // numbers.push(numbers.length + 1);
+        numbers = [...numbers, numbers.length + 1];
     }
 
     $: sum = numbers.reduce((t, n) =&gt; t + n, 0);
@@ -147,6 +144,9 @@
 </pre></div>
 
 </code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/7b986d12eb5f4e949192592a6587f121?version=4.2.18" target="_blank">aquí</a>.
+        </p>    
           <h1 id="props">Props</h1>
           <p>
             Props es el diminitivo de <em>Properties</em> y es un objeto que representa y almacena
@@ -160,30 +160,30 @@
             hijo. Si se desea que la propagación de la rección sea inversa, se debe aplicar otra
             técnica que también ofrece Svelte y se verá más adelante.
           </p>
-          <h2 id="declaraci-n-de-props-">Declaración de Props.</h2>
+          <h2 id="declaraci-n-de-props-">Declaración de Props</h2>
           <p>
             Para indicar que un atributo representa el estado interno del componente se usa la
             palabra <code>export</code>.
           </p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import Nested from &#39;./Nested.svelte&#39;;
 &lt;/script&gt;
 
-<span class="gi">+ &lt;Nested answer={42}/&gt;</span>
-</pre></div>
-
-</code></pre>
-          <p>Nested.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
-<span class="gd">-    let answer;</span>
-<span class="gi">+    export let answer;</span>
+ &lt;Nested answer={42}/&gt;
+</pre></div></code></pre>
+          
+<p>Nested.svelte</p>
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
+    // let answer;
+    export let answer;
 &lt;/script&gt;
 
 &lt;p&gt;The answer is {answer}&lt;/p&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/ee43b542ee0941eaa22ad4f7355aaf00?version=4.2.18" target="_blank">aquí</a>.
+        </p>  
           <h2 id="valores-por-defecto">Valores por defecto</h2>
           <p>
             Es recomendable trabajar con valores por defecto para evitar inconsistencias en el
@@ -191,25 +191,25 @@
             exponen como <em>property</em>:
           </p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import Nested from &#39;./Nested.svelte&#39;;
 &lt;/script&gt;
 
 &lt;Nested answer={42}/&gt;
 &lt;Nested/&gt;
-</pre></div>
-
-</code></pre>
-          <p>Nested.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
-<span class="gd">-    export let answer;</span>
-<span class="gi">+    export let answer = &#39;a mystery&#39;;</span>
+</pre></div></code></pre>
+          
+        <p>Nested.svelte</p>
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
+    //export let answer;
+    export let answer = &#39;a mystery&#39;;
 &lt;/script&gt;
 
 &lt;p&gt;The answer is {answer}&lt;/p&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/b470d278b1974a97b9f2311c354e02c2?version=4.2.18" target="_blank">aquí</a>.
+        </p>  
           <h2 id="props-extendidos">Props extendidos</h2>
           <p>
             Como se mencionó antes los props son un objeto, y una forma convencional de hacerlo es
@@ -217,7 +217,7 @@
             para pasar un prop:
           </p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import Info from &#39;./Info.svelte&#39;;
 
     const pkg = {
@@ -228,13 +228,12 @@
     };
 &lt;/script&gt;
 
-<span class="gd">- &lt;Info name={pkg.name} version={pkg.version} speed={pkg.speed} website={pkg.website}/&gt;</span>
-<span class="gi">+ &lt;Info {...pkg}/&gt;</span>
-</pre></div>
-
-</code></pre>
+&lt;!-- &lt;Info name={pkg.name} version={pkg.version} speed={pkg.speed} website={pkg.website}/&gt; --&gt;
+&lt;Info {...pkg}/&gt;</span>
+</pre></div></code></pre>
           <p>Info.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     export let name;
     export let version;
     export let speed;
@@ -246,30 +245,29 @@
     Download version {version} from &lt;a href=&quot;https://www.npmjs.com/package/{name}&quot;&gt;npm&lt;/a&gt;
     and &lt;a href={website}&gt;learn more here&lt;/a&gt;
 &lt;/p&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/0e60964673cc4a8f978eff0878362f65?version=4.2.18" target="_blank">aquí</a>.
+        </p>  
           <h1 id="slots"><em>Slots</em></h1>
           <p>
             Un <em>Slot</em> es un elemento que permite ser usado como "placeholder" y de ésta forma
             ser reemplazado por el marcado HTML que deseemos. Un ejemplo: Supongamos que se tiene
             código dentro de un componente llamado Card.svelte <br /><br />
             <code> &lt;div&gt; &lt;slot/&gt; &lt;/div&gt; </code> <br /><br />
-            Entonces, por ejemplo, si al usarlo se realiza lo siguiente <br /><br />
-            <pre>
-<code class="lang-diff">
-<div class="highlight">
-<pre>
+            Entonces, por ejemplo, si al usarlo se realiza lo siguiente </p>
+
+            <pre><code class="svelte"><div class="highlight"><pre>
 &lt;Card&gt; 
-&lt;h3&gt; Inside the slot &lt;/h3&gt;
-&lt;p&gt; This is goint to be inside the slot, too&lt;/p&gt;
+    &lt;h3&gt; Inside the slot &lt;/h3&gt;
+    &lt;p&gt; This is goint to be inside the slot, too&lt;/p&gt;
 &lt;/Card&gt;
-</pre>
-</div>
-</code>
-        </pre>
-            <br /><br />
-            el marcado HTML (en este caso los elementos h3 y p) serán colocados dentro del elemento
+</pre></div></code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/575d6573b05747a399e43bbf9e62e30a?version=4.2.18" target="_blank">aquí</a>.
+        </p>  
+            
+            El marcado HTML (en este caso los elementos h3 y p) serán colocados dentro del elemento
             div definido en Card.svelte. Ésta técnica es extremadamente cuando se quiere inyectar
             marcado HTML en un elemento con estilos predefinidos y que van a ser comunes sin
             importar el marcado que le insertemos. Un muy buen ejemplo ex un e-commerce, que al
@@ -281,24 +279,22 @@
           <p>
               Los <em>Slots</em> nombrados permiten asignar marcado HTML (como los slots corrientes) pero en un específico lugar que el desarrollador/a defina.
               Por ejemplo, si se modifica el ejemplo anterior y se agregan los siguientes atributos <em>name</em><br><br>
-
+          </p>
               <code> &lt;div&gt; &lt;slot name="slot-1"/&gt; &lt;p&gt; In the middle &lt;/p&gt; &lt;slot name="slot-2"/&gt; &lt;/div&gt; </code> <br /><br />
 
-<pre>
-<code class="lang-diff">
-<div class="highlight">
-<pre>
+<pre><code class="svelte"><div class="highlight"><pre>
 &lt;Card&gt; 
-&lt;h3 slot="slot-1"&gt; Inside the slot 1&lt;/h3&gt;
-&lt;p slot="slot-2"&gt; This is goint to be inside the slot 2&lt;/p&gt;
+    &lt;h3 slot="slot-1"&gt; Inside the slot 1&lt;/h3&gt;
+    &lt;p slot="slot-2"&gt; This is goint to be inside the slot 2&lt;/p&gt;
 &lt;/Card&gt;
-</pre>
-</div>
-</code>
-</pre>
-<br><br>
-Entonces, el elemento h3 y p (con atributos slot="slot-1" y slot="slot-2", respectivamente) serán colocados en el lugar de los slots con atributos name="slot-1" y name="slot-2", respectivamente.
-          </p>
+</pre></div></code></pre>
+<p>
+    Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/e0d83582d9bd4734a472dc49ab90425c?version=4.2.18" target="_blank">aquí</a>.
+</p>  
+        <p>
+            Entonces, el elemento h3 y p (con atributos slot="slot-1" y slot="slot-2", respectivamente) serán colocados en el lugar de los slots con atributos name="slot-1" y name="slot-2", respectivamente.
+        </p>
+          
         
           <h1 id="stores"><em>Stores</em></h1>
           <p>
@@ -313,7 +309,7 @@ Entonces, el elemento h3 y p (con atributos slot="slot-1" y slot="slot-2", respe
           </p>
           <h2 id="stores-escribibles"><em>Stores</em> escribibles</h2>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import { count } from &#39;./stores.js&#39;;
     import Incrementer from &#39;./Incrementer.svelte&#39;;
     import Decrementer from &#39;./Decrementer.svelte&#39;;
@@ -321,8 +317,8 @@ Entonces, el elemento h3 y p (con atributos slot="slot-1" y slot="slot-2", respe
 
     let count_value;
 
-<span class="gd">-    count.subscribe(value =&gt; {</span>
-<span class="gi">+    const unsubscribe = count.subscribe(value =&gt; {</span>
+    //count.subscribe(value =&gt; {
+    const unsubscribe = count.subscribe(value =&gt; {
         count_value = value;
     });
 &lt;/script&gt;
@@ -332,94 +328,10 @@ Entonces, el elemento h3 y p (con atributos slot="slot-1" y slot="slot-2", respe
 &lt;Incrementer/&gt;
 &lt;Decrementer/&gt;
 &lt;Resetter/&gt;
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <p>Decrementer.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
-    import { count } from &#39;./stores.js&#39;;
-
-    function decrement() {
-<span class="gi">+        count.update(n =&gt; n - 1);</span>
-    }
-&lt;/script&gt;
-
-&lt;button on:click={decrement}&gt;
-    -
-&lt;/button&gt;
-</pre></div>
-
-</code></pre>
-          <p>Incrementer.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
-    import { count } from &#39;./stores.js&#39;;
-
-    function increment() {
-<span class="gi">+        count.update(n =&gt; n + 1);</span>
-    }
-&lt;/script&gt;
-
-&lt;button on:click={increment}&gt;
-    +
-&lt;/button&gt;
-</pre></div>
-
-</code></pre>
-          <p>Resetter.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
-    import { count } from &#39;./stores.js&#39;;
-
-    function reset() {
-<span class="gi">+       count.set(0);</span>
-    }
-&lt;/script&gt;
-
-&lt;button on:click={reset}&gt;
-    reset
-&lt;/button&gt;
-</pre></div>
-
-</code></pre>
-          <p>store.js</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>import { writable } from &#39;svelte/store&#39;;
-
-export const count = writable(0);
-</pre></div>
-
-</code></pre>
-          <h2 id="auto-subscripciones">Auto-subscripciones</h2>
-          <p>
-            El uso del <em>Store</em> que se mostré en la subsección anterior presenta un problema:
-            nunca se desuscribe y en el caso de varias construcciones y destrucciones del componente
-            puede dar paso a un <em>memory-leak</em>.<br />Para realizar una autosubscripción sólo
-            basta con agregar el símbolo pesos <code>$</code> como prefijo al identificador del
-            <em>Store</em>.
-          </p>
-          <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
-    import { count } from &#39;./stores.js&#39;;
-    import Incrementer from &#39;./Incrementer.svelte&#39;;
-    import Decrementer from &#39;./Decrementer.svelte&#39;;
-    import Resetter from &#39;./Resetter.svelte&#39;;
-
-<span class="gd">-    let count_value;</span>
-<span class="gd">-</span>
-<span class="gd">-    count.subscribe(value =&gt; {</span>
-<span class="gd">-        count_value = value;</span>
-<span class="gd">-    });</span>
-&lt;/script&gt;
-
-<span class="gd">- &lt;h1&gt;The count is {count_value}&lt;/h1&gt;</span>
-<span class="gi">+ &lt;h1&gt;The count is {$count}&lt;/h1&gt;</span>
-
-&lt;Incrementer/&gt;
-&lt;Decrementer/&gt;
-&lt;Resetter/&gt;
-</pre></div>
-
-</code></pre>
-          <p>Decrementer.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import { count } from &#39;./stores.js&#39;;
 
     function decrement() {
@@ -430,11 +342,9 @@ export const count = writable(0);
 &lt;button on:click={decrement}&gt;
     -
 &lt;/button&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
           <p>Incrementer.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import { count } from &#39;./stores.js&#39;;
 
     function increment() {
@@ -445,15 +355,13 @@ export const count = writable(0);
 &lt;button on:click={increment}&gt;
     +
 &lt;/button&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
           <p>Resetter.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import { count } from &#39;./stores.js&#39;;
 
     function reset() {
-        count.set(0);
+       count.set(0);
     }
 &lt;/script&gt;
 
@@ -464,12 +372,86 @@ export const count = writable(0);
 
 </code></pre>
           <p>store.js</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>import { writable } from &#39;svelte/store&#39;;
+          <pre><code class="js"><div class="highlight"><pre>import { writable } from &#39;svelte/store&#39;;
 
 export const count = writable(0);
-</pre></div>
+</pre></div></code></pre>
+          <h2 id="auto-subscripciones">Auto-subscripciones</h2>
+          <p>
+            El uso del <em>Store</em> que se mostré en la subsección anterior presenta un problema:
+            nunca se desuscribe y en el caso de varias construcciones y destrucciones del componente
+            puede dar paso a un <em>memory-leak</em>.<br />Para realizar una autosubscripción sólo
+            basta con agregar el símbolo pesos <code>$</code> como prefijo al identificador del
+            <em>Store</em>.
+          </p>
+          <p>App.svelte</p>
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
+    import { count } from &#39;./stores.js&#39;;
+    import Incrementer from &#39;./Incrementer.svelte&#39;;
+    import Decrementer from &#39;./Decrementer.svelte&#39;;
+    import Resetter from &#39;./Resetter.svelte&#39;;
 
-</code></pre>
+    /* let count_value;
+
+    count.subscribe(value =&gt; {
+        count_value = value;
+    }); */
+&lt;/script&gt;
+
+&lt;!-- &lt;h1&gt;The count is {count_value}&lt;/h1&gt; --&gt;
+&lt;h1&gt;The count is {$count}&lt;/h1&gt;
+
+&lt;Incrementer/&gt;
+&lt;Decrementer/&gt;
+&lt;Resetter/&gt;
+</pre></div></code></pre>
+          <p>Decrementer.svelte</p>
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
+    import { count } from &#39;./stores.js&#39;;
+
+    function decrement() {
+        count.update(n =&gt; n - 1);
+    }
+&lt;/script&gt;
+
+&lt;button on:click={decrement}&gt;
+    -
+&lt;/button&gt;
+</pre></div></code></pre>
+
+          <p>Incrementer.svelte</p>
+
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
+    import { count } from &#39;./stores.js&#39;;
+
+    function increment() {
+        count.update(n =&gt; n + 1);
+    }
+&lt;/script&gt;
+
+&lt;button on:click={increment}&gt;
+    +
+&lt;/button&gt;
+</pre></div></code></pre>
+
+          <p>Resetter.svelte</p>
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
+    import { count } from &#39;./stores.js&#39;;
+
+    function reset() {
+        count.set(0);
+    }
+&lt;/script&gt;
+
+&lt;button on:click={reset}&gt;
+    reset
+&lt;/button&gt;
+</pre></div></code></pre>
+          <p>store.js</p>
+          <pre><code class="js"><div class="highlight"><pre>import { writable } from &#39;svelte/store&#39;;
+
+export const count = writable(0);
+</pre></div></code></pre>
           <h2 id="stores-de-s-lo-lectura"><em>Stores</em> de sólo lectura</h2>
           <p>
             Para ello se usa la función <code>readable</code> que toma como entrada un valor inicial
@@ -478,7 +460,7 @@ export const count = writable(0);
             relación:
           </p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import { time } from &#39;./stores.js&#39;;
 
     const formatter = new Intl.DateTimeFormat(&#39;en&#39;, {
@@ -490,29 +472,27 @@ export const count = writable(0);
 &lt;/script&gt;
 
 &lt;h1&gt;The time is {formatter.format($time)}&lt;/h1&gt;
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <p>stores.js</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>import { readable } from &#39;svelte/store&#39;;
+          <pre><code class="js"><div class="highlight"><pre>import { readable } from &#39;svelte/store&#39;;
 
-<span class="gd">- export const time = readable(null, function start(set) {</span>
-<span class="gi">+ export const time = readable(new Date(), function start(set) {</span>
-<span class="gi">+    const interval = setInterval(() =&gt; {</span>
-<span class="gi">+        set(new Date());</span>
-<span class="gi">+    }, 1000);</span>
+// export const time = readable(null, function start(set) {
+export const time = readable(new Date(), function start(set) {
+   const interval = setInterval(() =&gt; {
+       set(new Date());
+   }, 1000);
 
     return function stop() {
-<span class="gi">+       clearInterval(interval);</span>
+        clearInterval(interval);
     };
 });
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <h2 id="stores-derivados"><em>Stores</em> derivados</h2>
           <p>Se pueden crear <em>Stores</em> a partir de otros:</p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import { time, elapsed } from &#39;./stores.js&#39;;
 
     const formatter = new Intl.DateTimeFormat(&#39;en&#39;, {
@@ -529,11 +509,10 @@ export const count = writable(0);
     This page has been open for
     {$elapsed} {$elapsed === 1 ? &#39;second&#39; : &#39;seconds&#39;}
 &lt;/p&gt;
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <p>stores.js</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>import { readable, derived } from &#39;svelte/store&#39;;
+          <pre><code class="js"><div class="highlight"><pre>import { readable, derived } from &#39;svelte/store&#39;;
 
 export const time = readable(new Date(), function start(set) {
     const interval = setInterval(() =&gt; {
@@ -549,12 +528,10 @@ const start = new Date();
 
 export const elapsed = derived(
     time,
-<span class="gd">-    $time =&gt; {}</span>
-<span class="gi">+    $time =&gt; Math.round(($time - start) / 1000)</span>
+//  $time =&gt; {}
+    $time =&gt; Math.round(($time - start) / 1000)
 );
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
           <h2 id="stores-personalizados"><em>Stores</em> Personalizados</h2>
           <p>
             En vez de <em>exportar</em> un <em>Store</em> como se ha venido haciendo, se puede crear
@@ -563,7 +540,7 @@ export const elapsed = derived(
             compactos:
           </p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import { count } from &#39;./stores.js&#39;;
 &lt;/script&gt;
 
@@ -572,32 +549,124 @@ export const elapsed = derived(
 &lt;button on:click={count.increment}&gt;+&lt;/button&gt;
 &lt;button on:click={count.decrement}&gt;-&lt;/button&gt;
 &lt;button on:click={count.reset}&gt;reset&lt;/button&gt;
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <p>stores.js</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>import { writable } from &#39;svelte/store&#39;;
+          <pre><code class="js"><div class="highlight"><pre>import { writable } from &#39;svelte/store&#39;;
 
 function createCount() {
     const { subscribe, set, update } = writable(0);
 
     return {
         subscribe,
-<span class="gd">-        increment: () =&gt; {},</span>
-<span class="gi">+        increment: () =&gt; update(n =&gt; n + 1),</span>
-<span class="gd">-        decrement: () =&gt; {},</span>
-<span class="gi">+        decrement: () =&gt; update(n =&gt; n - 1),</span>
-<span class="gd">-        reset: () =&gt; {}</span>
-<span class="gi">+        reset: () =&gt; set(0)</span>
+//        increment: () =&gt; {},</span>
+          increment: () =&gt; update(n =&gt; n + 1),</span>
+//        decrement: () =&gt; {},</span>
+          decrement: () =&gt; update(n =&gt; n - 1),</span>
+//        reset: () =&gt; {}</span>
+          reset: () =&gt; set(0)</span>
     };
 }
 
 export const count = createCount();
-</pre></div>
+</pre></div></code></pre>
+<h2 id="stores-binding"><em>Store </em> bindings</h2>
+<p>
+    A continuación, se mostrará un ejemplo de cómo usar stores writable y binding para crear una lista de tareas en Svelte. Este ejemplo permitirá añadir y eliminar tareas de la lista de la siguiente manera:
+</p>
 
-</code></pre>
+<p>El archivo stores.js define el estado central de la lista de tareas utilizando un store writable de Svelte. En este archivo, el store tareas se inicializa con una lista de tareas predefinidas, cada una con un id, una descripción y un estado que indica si la tarea ha sido completada o no.</p>
+<p>store.js</p>
+
+<pre><code class="js"><div class="highlight"><pre>import { writable } from &#39;svelte/store&#39;;
+
+    export const tareas = writable([
+	{ id: 1, texto: 'Aprender Svelte', completada: false },
+	{ id: 2, texto: 'Construir una app', completada: false }
+
+    ]);
+    </pre></div></code></pre>
+
+<p>
+    El archivo page.svelte implementa la interfaz de usuario para gestionar la lista de tareas utilizando el store tareas. Este componente permite agregar, eliminar y marcar tareas como completadas.
+</p>
+<p>Input Binding: El campo de entrada está ligado a la variable nuevaTarea usando bind:value={nuevaTarea}, lo que permite que el valor de nuevaTarea se actualice en tiempo real con lo que el usuario escribe.</p>
+<p>page.svelte</p>
+
+<pre><code class="js"><div class="highlight"><pre>
+
+    &lt;script&gt;
+    import { tareas } from './stores.js';
+	let nuevaTarea = '';
+
+	function agregarTarea() {
+		if (nuevaTarea.trim() !== '') {
+			tareas.update(tareas => [
+				...tareas,
+				{ id: Date.now(), texto: nuevaTarea, completada: false }
+			]);
+			nuevaTarea = '';
+		}
+	}
+
+	function eliminarTarea(id) {
+		tareas.update(tareas => tareas.filter(tarea => tarea.id !== id));
+	}
+
+	function toggleCompletada(id) {
+		tareas.update(tareas =>
+			tareas.map(tarea =>
+				tarea.id === id ? { ...tarea, completada: !tarea.completada } : tarea
+			)
+		);
+	}
+
+    &lt;/script&gt;
+
+    &lt;h1&gt;Lista de Tareas&lt;/h1&gt;
+    &lt;input bind:value={nuevaTarea} placeholder="Nueva tarea"/&gt;
+    &lt;button on:click={agregarTarea}&gt;Agregar tarea&lt;/button&gt;
+    &lt;ul&gt;
+        {#each $tareas as tarea (tarea.id)}
+        &lt;li&gt;
+        &lt;input type="checkbox" checked={tarea.completada} on:change={() => toggleCompletada(tarea.id)}/&gt;
+        {tarea.texto}
+        &lt;button on:click={() => eliminarTarea(tarea.id)}&gt;Eliminar&lt;/button&gt;
+    &lt;/li&gt;
+    {/each}
+    &lt;/ul&gt;
+    </pre></div></code></pre>
+
+
           <h1 id="logic-">Logic:</h1>
-          <h2 id="if-">If:</h2>
+          <h2 id="if-">Implementación:</h2>
+          <p>
+            Svelte facilita la implementación de lógica a través del uso de javascript estándar. 
+            Esta funcionalidad se puede implementar a través del uso de la etiqueta script o con 
+            la implementación de módulos de javascript
+          </p>
+          <pre><code class="js"><div class="highlight"><pre>
+
+          &lt;script&gt;
+          let a = 5;
+          let b = 4;
+          let result = a + b;
+      
+          function calculateSum(x, y) {
+            return x + y;
+          }
+        
+          let sum = calculateSum(12, 20);
+      
+          &lt;/script&gt;
+          &lt;p&gt;  La suma de {a} y {b} es {result}&lt;/p&gt;
+          &lt;p&gt; La suma calculada es {sum} &lt;/p&gt;
+        </pre></div></code></pre>
+
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/2044a971916b4d11b0eeab925386c9a6?version=4.2.18" target="_blank">aquí</a>.
+        </p>
+                  <h2 id="if-">If:</h2>
           <p>
             Podemos usar un condicional if en el archivo .svelte. Las expresiones tienen la misma
             organización que se usa en javascript, por lo que se pueden usar los mismos operadores
@@ -622,12 +691,14 @@ export const count = createCount();
             Log in
         <span class="nt">&lt;/button&gt;</span>
     {/if}
-</pre></div>
+</pre></div></code></pre>
+<p>
+    Puedes un ejemplo del uso de #if en acción <a href="https://svelte.dev/repl/94acd31f133148779fb1a4b61498e794?version=4.2.18" target="_blank">aquí</a>.
+</p>
 
-</code></pre>
           <h2 id="else-">Else:</h2>
           <p>Podemos añadir una condición else en lugar de dos o más condicionales:</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>  &lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>  &lt;script&gt;
         let user = { loggedIn: false };
 
         function toggle() {
@@ -646,9 +717,8 @@ export const count = createCount();
             Log in
         &lt;/button&gt;
     {/if}
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <h2 id="else-if-">Else if:</h2>
           <p>
             Svelte permite el uso de else if, y similar al if, es posible usar operadores lóogicos
@@ -673,13 +743,30 @@ export const count = createCount();
     {:else}
         <span class="nt">&lt;p&gt;</span>{x} es impar <span class="nt">&lt;/p&gt;</span>
     {/if}
-</pre></div>
+</pre></div></code></pre>
+<h2 id="each-">Operadores lógicos</h2>
+<p>
+    Svelte permite el uso de operadores lógicos como "&&" o "!" para la creación de condiciones más complejas
+  </p>
+  <pre><code>&lt;script&gt;
+    let user = {
+        name: 'Juan',
+        age: 30
+      };
+  &lt;/script&gt;
+  {#if user && user.age >= 18}
 
+  &lt;p&gt{user.name} es mayor de edad &lt;/p&gt;
+{:else}
+&lt;p&gt{user.name} es menor de edad &lt;/p&gt;
+{/if}
 </code></pre>
+
           <h2 id="each-">Each:</h2>
           <p>
-            Podemos recorrer una lista usando la función Each. Se comporta similar a un ciclo for, y
-            es posible añadir un índice que acompaña cada elemento recorrido de la lista:
+            En Svelte, puedes recorrer una lista utilizando la función each. Esta función se comporta de manera similar a un ciclo for,
+             permitiendo iterar sobre arrays y objetos para renderizar dinámicamente listas de elementos en el DOM. Además, es posible 
+             añadir un índice que acompaña a cada elemento recorrido de la lista.
           </p>
           <pre><code class="lang-html"><div class="highlight"><pre>  <span class="nt">&lt;script&gt;</span>
         <span class="kd">let</span> <span class="nx">cats</span> <span class="o">=</span> <span class="p">[</span>
@@ -706,9 +793,11 @@ export const count = createCount();
             <span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
         {/each}
     <span class="nt">&lt;/ul&gt;</span>
-</pre></div>
+</pre></div></code></pre>
+<p>
+    Puedes ver un ejemplo deluso de #each en acción<a href="https://svelte.dev/repl/bb6797ac11fa42fda7ff0d9181983ce8?version=4.2.18" target="_blank">aquí</a>.
+</p>
 
-</code></pre>
           <h2 id="await-">Await:</h2>
           <p>
             En caso de que la aplicación espere datos a partir de funciones asíncronas, podemos usar
@@ -747,15 +836,16 @@ export const count = createCount();
     {:catch error}
         <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">&quot;color: red&quot;</span><span class="nt">&gt;</span>{error.message}<span class="nt">&lt;/p&gt;</span>
     {/await}
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
+<p>
+    Para ver un ejemplo más complejo de varias de las implementaciones de lógica dentro de Svelte haz
+    click <a href="https://svelte.dev/repl/ea4a72092e744a94879bbe7942d3637b?version=4.2.18" target="_blank">aquí</a>.
+</p>
           <h1 id="events-">Events:</h1>
           <p>Svelte nos facilita hacer uso y definir listeners hacia eventos en el DOM usando</p>
           <pre><code class="lang-html"><div class="highlight"><pre>on:<span class="nt">&lt;event&gt;</span>
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <h2 id="mouse-move-">Mouse move:</h2>
           <p>
             Para este ejercicio capturamos la posicion del mouse haciendo uso de la funcion
@@ -777,9 +867,8 @@ export const count = createCount();
 <span class="nt">&lt;style&gt;</span>
     <span class="nt">div</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span> <span class="p">}</span>
 <span class="nt">&lt;/style&gt;</span>
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <h2 id="inline-handlers-">Inline Handlers:</h2>
           <p>
             Por otro lado la misma aplicación se puede realizar declarando la funcion en la misma
@@ -796,9 +885,8 @@ export const count = createCount();
 <span class="nt">&lt;style&gt;</span>
     <span class="nt">div</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span> <span class="p">}</span>
 <span class="nt">&lt;/style&gt;</span>
-</pre></div>
+</pre></div></code></pre>
 
-</code></pre>
           <h2 id="event-modifiers-">Event modifiers:</h2>
           <p>
             Los eventos relacionados al DOM pueden tener modificaciones que alteran el
@@ -813,8 +901,9 @@ export const count = createCount();
             </li>
             <li>
               nonpassive: Configura passive:false<br />
-              <pre>
-<code><p>&lt;script&gt;
+
+            <br />
+              <pre><code><p>&lt;script&gt;
     function handleClick() {
         alert(&#39;no more alerts&#39;)
     }
@@ -827,11 +916,12 @@ export const count = createCount();
           </ul>
 
           <h2 id="inline-handlers-">Component events:</h2>
-          Los componentes también pueden disparar eventos. `createEventDispatcher` debe ser llamado
-          cuando el componente es iniciado por primera vez. Esto permite conectar el envio a donde
-          el componente fue instanciado Inner.svelte
-          <pre>
-<code>&lt;script&gt;
+          En Svelte, los componentes pueden disparar eventos personalizados para comunicar información a otros componentes,
+           generalmente a los componentes padres. Para disparar estos eventos, se utiliza createEventDispatcher. Esta función 
+           debe ser llamada cuando el componente se inicializa por primera vez. Esto permite conectar el envío de eventos desde 
+           el componente a donde el componente fue instanciado.
+
+          <pre> <code>&lt;script&gt;
     import { createEventDispatcher } from &#39;svelte&#39;;
     const dispatch = createEventDispatcher();
     function sayHello() {
@@ -858,6 +948,9 @@ export const count = createCount();
 &lt;/script&gt;
 &lt;Inner on:message/&gt;</code>
 </pre>
+<p>
+    Puedes ver un ejemplo más complejo de la implementación de eventos en Svelte dando click <a href="https://svelte.dev/repl/f1b6b8dae8b144a59fe41e7f837ae3bc?version=4.2.18" target="_blank">aquí</a>.
+</p>
 
           <h1 id="inline-handlers-">Bindings:</h1>
           Un binding es una propiedad de las etiquetas de Svelte que permite asignarla a un valor
@@ -891,8 +984,7 @@ export const count = createCount();
     &lt;input type=number bind:value={b} min=0 max=10&gt;
     &lt;input type=range bind:value={b} min=0 max=10&gt;
 &lt;/label&gt;
-&lt;p&gt;{a} + {b} = {a + b}&lt;/p&gt;</code>
-</pre>
+&lt;p&gt;{a} + {b} = {a + b}&lt;/p&gt;</code></pre>
 
           <h2 id="inline-handlers-">Checkbox:</h2>
           Podemos utilizar checkbox para tomar un valor booleano, y hacer que la aplicación
@@ -1236,7 +1328,7 @@ export const count = createCount();
           ciclo de vida. Las funciones del ciclo de vida se deben llamar mientras el componente se
           está inicializando para que la devolución de llamada esté vinculada a la instancia del
           componente.
-          <h2 id="inline-handlers-">Lifecycle</h2>
+          <h2 id="inline-handlers-">onMount:</h2>
           Corre despues de que el componente es renderizado primero en el DOM. Si la llamada de
           onMount devuelve una función, esa función se llamará cuando se destruya el componente
           <pre>
@@ -1281,62 +1373,65 @@ export const count = createCount();
 <span class="o">&lt;</span><span class="err">/style&gt;</span>
 </code>
 </pre>
-
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/393f845ff39e454c952a49607c61d843?version=4.2.18" target="_blank">aquí</a>.
+        </p>
           <h2 id="ondestroy-">onDestroy:</h2>
           <p>Es necesario cuando se quiere ejecutar codigo cuando el componente es destruido.</p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
-<span class="gd">-     import { onDestroy } from &#39;svelte&#39;;</span>
-<span class="gi">+     import { onInterval } from &#39;./utils.js&#39;;</span>
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
+//  import { onDestroy } from &#39;svelte&#39;;
+    import { onInterval } from &#39;./utils.js&#39;;
 
     let seconds = 0;
-<span class="gi">+    onInterval(() =&gt; seconds += 1, 1000);</span>
+    onInterval(() =&gt; seconds += 1, 1000);
 &lt;/script&gt;
 
 &lt;p&gt;
     The page has been open for
     {seconds} {seconds === 1 ? &#39;second&#39; : &#39;seconds&#39;}
 &lt;/p&gt;
-</pre></div>
-
-</code></pre>
-          <p>utils.js</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>import { onDestroy } from &#39;svelte&#39;;
+</pre></div></code></pre>
+          
+        <p>utils.js</p>
+          <pre><code class="js"><div class="highlight"><pre>import { onDestroy } from &#39;svelte&#39;;
 
 export function onInterval(callback, milliseconds) {
     // implementation goes here
-<span class="gi">+    const interval = setInterval(callback, milliseconds);</span>
+    const interval = setInterval(callback, milliseconds);
 
-<span class="gi">+    onDestroy(() =&gt; {</span>
-<span class="gi">+        clearInterval(interval);</span>
-<span class="gi">+        });    </span>
+    onDestroy(() =&gt; {
+        clearInterval(interval);
+        });    
 }
-</pre></div>
-
-</code></pre>
-          <h2 id="beforeupdate-and-afterupdate-">beforeUpdate and afterUpdate:</h2>
+</pre></div></code></pre>
+          
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/7f2419ce64494bb6956f257b60257498?version=4.2.18" target="_blank">aquí</a>.
+        </p>
+        <h2 id="beforeupdate-and-afterupdate-">beforeUpdate and afterUpdate:</h2>
           <p>
             Son sus contrapartes, la funcion <code>beforeUpdate</code> programa trabajo para
             ejecutarse antes de que el DOM sea actualizado y el <code>afterUpdate</code> para correr
             codigo una vez el DOM es sincronizado con la informacion
           </p>
           <p>App.svelte</p>
-          <pre><code class="lang-diff"><div class="highlight"><pre>&lt;script&gt;
+          <pre><code class="svelte"><div class="highlight"><pre>&lt;script&gt;
     import Eliza from &#39;elizabot&#39;;
     import { beforeUpdate, afterUpdate } from &#39;svelte&#39;;
 
     let div;
-<span class="gi">+     let autoscroll;    </span>
+    let autoscroll;    
 
     beforeUpdate(() =&gt; {
         // determine whether we should auto-scroll
         // once the DOM is updated...
-<span class="gi">+    autoscroll = div &amp;&amp; (div.offsetHeight + div.scrollTop) &gt; (div.scrollHeight - 20);</span>
+        autoscroll = div &amp;&amp; (div.offsetHeight + div.scrollTop) &gt; (div.scrollHeight - 20);
     });
 
     afterUpdate(() =&gt; {
         // ...the DOM is now in sync with the data
-<span class="gi">+    if (autoscroll) div.scrollTo(0, div.scrollHeight);</span>
+        if (autoscroll) div.scrollTo(0, div.scrollHeight);
     });
 
     const eliza = new Eliza();
@@ -1431,9 +1526,10 @@ export function onInterval(callback, milliseconds) {
 
     &lt;input on:keydown={handleKeydown}&gt;
 &lt;/div&gt;
-</pre></div>
-
-</code></pre>
+</pre></div></code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/35b74619db30421d9be08244d5463417?version=4.2.18" target="_blank">aquí</a>.
+        </p>
           <h2 id="tick-">Tick:</h2>
           <p>
             Retorna una promesa que se resuelve tan pronto cualquier cambio de estado pendiente ha
@@ -1479,9 +1575,10 @@ export function onInterval(callback, milliseconds) {
 <span class="nt">&lt;/style&gt;</span>
 
 <span class="nt">&lt;textarea</span> <span class="na">value=</span><span class="s">{text}</span> <span class="na">on:keydown=</span><span class="s">{handleKeydown}</span><span class="nt">&gt;&lt;/textarea&gt;</span>
-</pre></div>
-
-</code></pre><br />
+</pre></div></code></pre>
+        <p>
+            Puedes ver este ejemplo en acción <a href="https://svelte.dev/repl/86f8c0a8534b4d4ab106ea4dc5196b83?version=4.2.18" target="_blank">aquí</a>.
+        </p>
 
 
 <h1 id="motion"><em>Motion</em></h1>
@@ -1499,28 +1596,20 @@ export function onInterval(callback, milliseconds) {
               <br>
 
               
-<pre>
-<code class="lang-diff">
-<div class="highlight">
-<pre>
+<pre><code class="svelte"><div class="highlight"><pre>
 &lt;script&gt; 
     import { tweened } from 'svelte/motion';
     
     const progress = tweened(0);
 &lt;/script&gt;
-</pre>
-</div>
-</code>
-</pre>
-<br>
-Al hacer click en los botones esto causa que la variable progress se actualice a 
-su nuevo valor. Pero esto es un poco robótico y no muy satisfactorio. Así que agreguemos 
-una nueva función sencilla.
+</pre></div></code></pre>
+<p>
+    Al hacer click en los botones esto causa que la variable progress se actualice a 
+    su nuevo valor. Pero esto es un poco robótico y no muy satisfactorio. Así que agreguemos 
+    una nueva función sencilla.
+</p>
 
-<pre>
-    <code class="lang-diff">
-    <div class="highlight">
-    <pre>
+<pre><code class="svelte"><div class="highlight"><pre>
     &lt;script&gt; 
         import { tweened } from 'svelte/motion';
         import { cubicOut } from 'svelte/easing';
@@ -1529,13 +1618,11 @@ una nueva función sencilla.
             duration: 400,
             easing: cubicOut
         });
-    &lt;/script&gt; </pre> </div>
-    </code>
-    </pre>
-    El módulo <em>svelte/motion</em> nos provee una serie de funciones que nos ayudan a agilizar 
-    estos procesos.
-          </p>
-
+    &lt;/script&gt; </pre> </div></code></pre>
+    <p>
+        El módulo <em>svelte/motion</em> nos provee una serie de funciones que nos ayudan a agilizar 
+        estos procesos.
+    </p>
 
           <h2 id="spring"><em>Spring</em></h2>
 
@@ -1545,40 +1632,31 @@ una nueva función sencilla.
               Vamos a ver un ejemplo en el que se tiene dos estados, uno está representando 
               las coordenadas y el otro representa el tamaño. Así que como se vería esto con <em>springs</em>.
               <br>              
-<pre>
-<code class="lang-diff">
-<div class="highlight">
-<pre>
+<pre><code class="svelte"><div class="highlight"><pre>
 &lt;script&gt; 
     import { spring } from 'svelte/motion';
 
     let coords = spring({ x: 50, y: 50 });
     let size = spring(10);
 &lt;/script&gt;
-</pre>
-</div>
-</code>
-</pre>
-<br>
-Ambos springs vienen por defecto con unos valores <em>stiffness</em>  y <em>damping</em>, los 
-cuales son los encargados de que el spring se comporte de manera correcta o como se supone un spring se debe comportar. 
-De esta manera podemos especificar nuestro propios valores iniciales.
+</pre></div></code></pre>
 
-<pre>
-    <code class="lang-diff">
-    <div class="highlight">
-    <pre>
+<p>
+    Ambos springs vienen por defecto con unos valores <em>stiffness</em>  y <em>damping</em>, los 
+    cuales son los encargados de que el spring se comporte de manera correcta o como se supone un spring se debe comportar. 
+    De esta manera podemos especificar nuestro propios valores iniciales.
+</p>
+
+<pre><code class="js"><div class="highlight"><pre>
     let coords = spring({ x: 50, y: 50 }, {
         stiffness: 0.1,
         damping: 0.25
         }); 
-</pre>
- </div>
-    </code>
-    </pre>
-Al mover el mouse por la pantalla se va a hacer que el comportamiento de los spring cambie.
-Nótece que se puede ajustar los valores aun cuando el spring ya se está ejecutando.
-    </p>
+</pre></div></code></pre>
+<p>
+    Al mover el mouse por la pantalla se va a hacer que el comportamiento de los spring cambie.
+    Nótece que se puede ajustar los valores aun cuando el spring ya se está ejecutando.
+</p>
 
           <!-- CODIGO GENERADO CON https://www.npmjs.com/package/markdown-to-html -->
           <!-- CODIGO GENERADO CON https://www.npmjs.com/package/markdown-to-html -->
@@ -1601,9 +1679,12 @@ Nótece que se puede ajustar los valores aun cuando el spring ya se está ejecut
     <script src="assets/js/breakpoints.min.js"></script>
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-svelte/dist/svelte.min.js"></script>
     <script>
-      hljs.highlightAll()
-    </script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+          hljs.highlightAll();
+        });
+      </script>
   </body>
 </html>
