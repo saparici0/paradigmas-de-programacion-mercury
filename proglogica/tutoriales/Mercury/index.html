@@ -163,7 +163,33 @@
 									<code>:- module hello.<br>:- interface.<br>:- import_module io.<br><br>:- pred main(io::di, io::uo) is det.<br><br>:- implementation.<br><br>main(!IO) :-<br>   io.write_string("Hello World!", !IO).<br></code>
 								</pre>
 							</div>
+							<li><a href="https://glot.io/snippets/gx6e5r6rq5" target="_blank" rel="noopener noreferrer">addc.m</a></li>
 							<br>
+							<p>
+								El siguiente es un ejemplo que demuestra la integración de Mercury con C, Java y C#. En este caso el código usa la función sumar implementada en C y la llama dentro del código de Mercury. Se usa el "pragma" foreign_proc para declarar la función.
+							</p>
+							<div class="code-container">
+								<pre>
+									<code>:- module addc.<br>:- interface.<br>:- import_module io.<br>:- pred main(io::di, io::uo) is det.<br>:- implementation.<br>:- import_module string, int.<br>:- pred add(int::in, int::in, int::out) is det.<br>:- pragma foreign_proc("C",<br>    add(A::in, B::in, Result::out),<br>    [will_not_call_mercury, promise_pure, thread_safe],<br>"<br>    int add(int a, int b) {<br>        return a + b;<br>    }<br>    Result = add(A,B);<br>").<br>main(!IO) :-<br>    io.read_line_as_string(ResultA, !IO),<br>    (<br>        ResultA = ok(LineA),<br>        StrippedA = string.strip(LineA),<br>        ( if string.to_int(StrippedA, A) then<br>            io.read_line_as_string(ResultB, !IO),<br>            (<br>                ResultB = ok(LineB),<br>                StrippedB = string.strip(LineB),<br>                ( if string.to_int(StrippedB, B) then<br>                    add(A, B, Sum),<br>                    io.write_string("The sum is: ", !IO),<br>                    io.write_int(Sum, !IO),<br>                    io.nl(!IO)<br>                else<br>                    B = 0,<br>                    add(A, B, Sum),<br>                    io.write_string("The sum is: ", !IO),<br>                    io.write_int(Sum, !IO),<br>                    io.nl(!IO)<br>                )<br>            ;<br>                ResultB = eof,<br>                io.write_string("Unexpected end of second <br>nput\n", !IO)<br>            ;<br>                ResultB = error(ErrorCode),<br>                io.write_string(io.error_message(<br>rrorCode) ++ "\n", !IO)<br>            )<br>        else<br>            A = 0,<br>            B = 0,<br>            add(A, B, Sum),<br>            io.write_string("The sum is: ", !IO),<br>            io.write_int(Sum, !IO),<br>            io.nl(!IO)<br>        )<br>    ;<br>        ResultA = eof,<br>        io.write_string("Unexpected end of first<br>input\n", !IO)<br>    ;<br>        ResultA = error(ErrorCode),<br>        io.write_string(io.error_message(ErrorCode) ++ <br>\n", !IO)<br>    ).<br></code>
+								</pre>
+							</div>
+							<br>
+							<li><a href="https://glot.io/snippets/gx6f5maqw7" target="_blank" rel="noopener noreferrer">puzzle.m</a></li>
+							<br>
+							<p>
+								Para demostrar las funcionalidades de Mercury para tareas más complejas. Vamos a tratar de resolver el siguiente problema:<br><br>
+								Hay una calle con tres casas vecinas que tienen cada una un color diferente. Son rojos, azules y verdes. En las diferentes casas viven personas de diferentes nacionalidades y todos tienen una mascota diferente. Aquí hay algunos datos más sobre ellos:<br>
+								El inglés vive en la casa roja.<br>
+								El jaguar es la mascota de la familia española.<br>
+								Los japoneses viven a la derecha del cuidador de caracoles.<br>
+								El cuidador de los caracoles vive a la izquierda de la casa azul.<br>
+								¿Quién se queda con la cebra?<br>
+							</p>
+							<div class="code-container">
+								<pre>
+									<code>:- module puzzle.<br>:- interface.<br>:- import_module io.<br>:- pred main(io::di, io::uo) is det.<br>:- implementation.<br>:- import_module list, string, solutions.<br><br>% especificacion de los tipos de datos y los valores posibles<br>:- type origenes ---> ingles; japones; espanol.<br>:- type colores ---> rojo; azul; verde.<br>:- type mascotas ---> jaguar; caracol; cebra.<br>:- type casa<br>    --->    casa(<br>                origen :: origenes,<br>                color :: colores,<br>                mascota :: mascotas<br>            ).<br><br>% funcion para determinar que dos casas no sean iguales<br>:- pred distinct(casa::in, casa::in) is semidet.<br>distinct(casa(O1, C1, M1), casa(O2, C2, M2)) :-<br>    not (O1 = O2; C1 = C2; M1 = M2).<br><br>:- pred fila(list(casa)::out) is nondet.<br>fila([X, Y, Z]) :-<br>    casa(X), casa(Y), casa(Z),<br>    % los japoneses viven a la derecha del cuidador de caracoles<br>    X^mascota = caracol     <=> Y^origen = japones,<br>    Y^mascota = caracol     <=> Z^origen = japones,<br>    % el cuidador de los caracoles vive a la izquierda de la casa azul<br>    Z^color = azul          <=> Y^mascota = caracol,<br>    Y^color = azul          <=> X^mascota = caracol,<br>    % los japoneses viven a la derecha del cuidador de caracoles<br>    not X^origen = japones,<br>    % el cuidador de los caracoles vive a la izquierda de la casa azul<br>    not Z^mascota = caracol,<br>    distinct(X, Y), distinct(Y, Z), distinct(X, Z).<br><br>:- pred casa(casa::out) is nondet.<br>casa(casa(O, C, M)) :-<br>    % verificamos que los datos de la casa son validos<br>    origen(O), color(C), mascota(M),<br>    % el ingles vive en la casa roja<br>    O = ingles <=> C = rojo,<br>    % el jaguar es la mascota de la familia española<br>    O = espanol <=> M = jaguar,<br>    % los japoneses viven a la dereca del cuidador de caracoles<br>    not (O = japones, M = caracol),<br>    % el cuidador de caracoles vive a la izquierda de la casa azul<br>    not (M = caracol, C = azul).<br><br>main(!IO) :-<br>    solutions(fila, Soluciones),<br>    ( if Soluciones = [] then<br>        io.write_string("Sin solucion.\n", !IO)<br>    else<br>        foldl((pred(L::in, !.IO::di, !:IO::uo) is det :-<br>            io.print(L, !IO),<br>            io.nl(!IO)), Soluciones, !IO)<br>    ).<br><br>:- pred origen(origenes::out) is multi.<br>origen(ingles).<br>origen(japones).<br>origen(espanol).<br><br>:- pred color(colores).<br>:- mode color(out) is multi.<br>:- mode color(in) is det.<br>color(rojo).<br>color(azul).<br>color(verde).<br><br>:- pred mascota(mascotas::out) is multi.<br>mascota(jaguar).<br>mascota(caracol).<br>mascota(cebra).<br></code>
+								</pre>
+							</div>
 						</ul>
 						
 						<ul class="actions">
@@ -183,6 +209,8 @@
 					<section id="seven">
 						<p>Creado por:</p>
 						<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Juan Castelblanco <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ivan Cepeda <br>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Camilo Rodriguez <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stevan Valbuena <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Samuel Salgado <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Diego Bulla</p>
+						<p >Ejemplos adicionales por:</p>
+						<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Simón Aparicio <br></p>
 					</section>
 					
 
