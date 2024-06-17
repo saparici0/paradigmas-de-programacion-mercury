@@ -261,7 +261,15 @@
 							<pre>
 							<code>:- module crypt.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module list, int, string.<br /><br />% Predicado principal<br />main(!IO) :-<br /> % Ecuaciones del criptograma<br /> Equations = [[dog, plus, ant, equals, cat], [420, plus, 531, equals, 951]],<br /><br /> % Resolver las ecuaciones<br /> solve(Equations,!IO).<br /><br />% Función para resolver las ecuaciones<br />solve([], _).<br />solve([Equation|Rest], IO) :-<br /> ( if Equation = [X, op, Y, equals, Z] then<br /> find(X, Y, Z, Rest, IO)<br /> else<br /> solve(Rest, IO)).<br /><br />% Función auxiliar para buscar soluciones<br %>find(X, Y, Z, Equations, IO) :-<br %>find(X, Y, Z, Equations, IO, []).<br %>find(_, _, _, [], _).<br %>find(X, Y, Z, [Equation|Rest], IO, Visited) :-<br %> ( if member(Equation, Visited) then<br %> fail<br %> else<br %> ( if Equation = [X, op, Y, equals, Z] then<br %> true<br %> else<br %> find(X, Y, Z, Rest, IO, [Equation|Visited]))<br %> ).<br /></code>
 							</pre>
-							</div>		
+							</div>	
+							<p>
+								Este ejemplo demuestra cómo declarar y usar variables en Mercury, un lenguaje de programación lógico y funcional. Se presentan ejemplos de variables enteras, flotantes, cadenas y listas, y se muestran cómo se pueden usar para realizar operaciones básicas de entrada y salida.
+							</p>
+							<div class="code-container">
+							<pre>							
+							<code>:- module ejemplo_variables.<br />:- interface.<br />:- import_module io.<br /><br />% Predicado principal<br />:- pred main(io::di, io::uo) is det.<br /><br />% Implementación del módulo<br />:- implementation.<br />:- import_module list.<br /><br />main(!IO) :-<br />    % Declaración de variables<br />    IntVar = 42,<br />    FloatVar = 3.14,<br />    StringVar = "Hola, Mercury",<br />    ListVar = [1, 2, 3, 4, 5],<br /><br />    % Uso de variables y salida<br />    io.write_string("Valor de IntVar: ", !IO),<br />    io.write_int(IntVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de FloatVar: ", !IO),<br />    io.write_float(FloatVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de StringVar: ", !IO),<br />    io.write_string(StringVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valores de ListVar: ", !IO),<br />    io.write_list(ListVar, ", ", io.write_int, !IO),<br />    io.nl(!IO).<br /></code>							
+							</pre>
+							</div>			
 						</ul>
 						
 						<ul class="actions">
