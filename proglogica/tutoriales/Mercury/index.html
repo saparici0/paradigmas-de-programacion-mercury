@@ -269,7 +269,16 @@
 							<pre>							
 							<code>:- module ejemplo_variables.<br />:- interface.<br />:- import_module io.<br /><br />% Predicado principal<br />:- pred main(io::di, io::uo) is det.<br /><br />% Implementación del módulo<br />:- implementation.<br />:- import_module list.<br /><br />main(!IO) :-<br />    % Declaración de variables<br />    IntVar = 42,<br />    FloatVar = 3.14,<br />    StringVar = "Hola, Mercury",<br />    ListVar = [1, 2, 3, 4, 5],<br /><br />    % Uso de variables y salida<br />    io.write_string("Valor de IntVar: ", !IO),<br />    io.write_int(IntVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de FloatVar: ", !IO),<br />    io.write_float(FloatVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de StringVar: ", !IO),<br />    io.write_string(StringVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valores de ListVar: ", !IO),<br />    io.write_list(ListVar, ", ", io.write_int, !IO),<br />    io.nl(!IO).<br /></code>							
 							</pre>
-							</div>			
+							</div>	
+							<p>
+								Este ejemplo demuestra cómo implementar el Teorema de Palomar en Mercury, un lenguaje de programación lógico y funcional. El Teorema de Palomar establece que todo número entero positivo mayor a 1 tiene al menos un divisor primo. Se presenta un predicado principal que interactúa con el usuario para verificar esta propiedad en un número dado.
+							</p>
+							<div class="code-container">
+							<pre>
+							<code>:- module palomar_theorem.<br />:- interface.<br />:- pred main(io::di, io::uo) is det.<br /><br />% Implementación del módulo<br />:- implementation.<br />:- import_module io.<br /><br />main(IO_in, IO_out) :-<br />    write("Introduzca un numero entero positivo mayor a 1: ", IO_in, IO_out),<br />    read_int(IO_in, IO_out, N),<br />    ( N > 1 -><br />        ( has_prime_divisor(N) -><br />            write("El numero tiene al menos un divisor primo.\n", IO_out)<br />        ;<br />            write("El numero no tiene divisores primos.\n", IO_out)<br />        )<br />    ;<br />        write("El numero debe ser mayor a 1.\n", IO_out)<br />    ).<br /><br />has_prime_divisor(N) :- prime_divisors(N, Divs), Divs = [_|_].<br /><br />prime_divisors(N, [N]) :- prime(N),!.<br />prime_divisors(N, Divs) :-<br />    findall(D, (between(2, N, D), prime(D), N mod D =:= 0), Divs).<br /><br />prime(N) :- \+ composite(N).<br />composite(N) :- between(2, sqrt(N), I), N mod I =:= 0.<br /><br />sqrt(X, Y) :- Y * Y =< X, (Y + 1) * (Y + 1) > X.<br /></code>
+							</pre>
+							</div>
+
 						</ul>
 						
 						<ul class="actions">
