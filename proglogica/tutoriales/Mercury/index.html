@@ -236,33 +236,27 @@
 								</pre>
 							</div>
 							<p>
-								Ahora veamos ejemplos varios donde vamos a ver criptogramas aritmeticos, un arbol binario y como implementar un sistema basico de gestion de biblioteca:
+							    Ahora veamos un ejemplo de código en Mercury donde se ilustra la manipulación de tipos y la conversión de valores:
 							</p>
 							<p>
-								Este ejemplo demuestra cómo resolver criptogramas aritméticos en Mercury, un lenguaje de programación lógico y funcional. Los criptogramas aritméticos consisten en ecuaciones donde los operadores están representados por letras y los operandos son números. El objetivo es encontrar valores para las variables que satisfacen todas las ecuaciones dadas.
+							    Este ejemplo demuestra cómo manejar la conversión de tipos en Mercury y evita errores comunes relacionados con tipos al implementar un sistema básico de impresión de cadenas.
 							</p>
 							<div class="code-container">
-							<pre>
-							<code>:- module crypt.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module list, int, string.<br /><br />% Predicado principal<br />main(!IO) :-<br /> % Ecuaciones del criptograma<br /> Equations = [[dog, plus, ant, equals, cat], [420, plus, 531, equals, 951]],<br /><br /> % Resolver las ecuaciones<br /> solve(Equations,!IO).<br /><br />% Función para resolver las ecuaciones<br />solve([], _).<br />solve([Equation|Rest], IO) :-<br /> ( if Equation = [X, op, Y, equals, Z] then<br /> find(X, Y, Z, Rest, IO)<br /> else<br /> solve(Rest, IO)).<br /><br />% Función auxiliar para buscar soluciones<br %>find(X, Y, Z, Equations, IO) :-<br %>find(X, Y, Z, Equations, IO, []).<br %>find(_, _, _, [], _).<br %>find(X, Y, Z, [Equation|Rest], IO, Visited) :-<br %> ( if member(Equation, Visited) then<br %> fail<br %> else<br %> ( if Equation = [X, op, Y, equals, Z] then<br %> true<br %> else<br %> find(X, Y, Z, Rest, IO, [Equation|Visited]))<br %> ).<br /></code>
-							</pre>
+								<pre>
+									<code>:- module main.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module string.<br /><br />:- pred ejemplo_predicado(int::in, string::out) is det.<br />ejemplo_predicado(X, Y) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Esto sería un error de tipo en Mercury<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Y = X + "hola".<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Forma correcta con conversión explícita<br /> &nbsp;&nbsp;&nbsp;&nbsp;Y = string.from_int(X) ++ " hola".<br /><br />main(!IO) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;T = 1,<br /> &nbsp;&nbsp;&nbsp;&nbsp;% No puedo asignar otro tipo a una variable creada<br /> &nbsp;&nbsp;&nbsp;&nbsp;% T = "hola",<br /> &nbsp;&nbsp;&nbsp;&nbsp;% T = 2,<br /> &nbsp;&nbsp;&nbsp;&nbsp;ejemplo_predicado(42, Resultado),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_string(Resultado, !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.nl(!IO).<br /></code>
+								</pre>
 							</div>
+							p>
+							    Este ejemplo en Mercury demuestra el uso de predicados deterministas y semideterministas para realizar operaciones aritméticas y verificar propiedades de los elementos en una lista.
+							</p>
 							<p>
-								Este ejemplo demuestra cómo resolver criptogramas aritméticos en Mercury, un lenguaje de programación lógico y funcional. Los criptogramas aritméticos consisten en ecuaciones donde los operadores están representados por letras y los operandos son números. El objetivo es encontrar valores para las variables que satisfacen todas las ecuaciones dadas.
+							    El código muestra cómo sumar dos números, verificar si un número es par y comprobar la membresía de un elemento en una lista.
 							</p>
 							<div class="code-container">
-							<pre>
-							<code>:- module crypt.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module list, int, string.<br /><br />% Predicado principal<br />main(!IO) :-<br /> % Ecuaciones del criptograma<br /> Equations = [[dog, plus, ant, equals, cat], [420, plus, 531, equals, 951]],<br /><br /> % Resolver las ecuaciones<br /> solve(Equations,!IO).<br /><br />% Función para resolver las ecuaciones<br />solve([], _).<br />solve([Equation|Rest], IO) :-<br /> ( if Equation = [X, op, Y, equals, Z] then<br /> find(X, Y, Z, Rest, IO)<br /> else<br /> solve(Rest, IO)).<br /><br />% Función auxiliar para buscar soluciones<br %>find(X, Y, Z, Equations, IO) :-<br %>find(X, Y, Z, Equations, IO, []).<br %>find(_, _, _, [], _).<br %>find(X, Y, Z, [Equation|Rest], IO, Visited) :-<br %> ( if member(Equation, Visited) then<br %> fail<br %> else<br %> ( if Equation = [X, op, Y, equals, Z] then<br %> true<br %> else<br %> find(X, Y, Z, Rest, IO, [Equation|Visited]))<br %> ).<br /></code>
-							</pre>
+								<pre>
+									<code>:- module main.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module int, list.<br /><br />% Predicado determinista: add<br />:- pred add(int::in, int::in, int::out) is det.<br />add(X, Y, Z) :- Z = X + Y.<br /><br />% Predicado semideterminista: is_even<br />:- pred is_even(int::in) is semidet.<br />is_even(X) :- X mod 2 = 0.<br /><br />% Predicado semideterminista: my_member<br />:- pred my_member(int::in, list(int)::in) is semidet.<br />my_member(X, [X | _]).<br />my_member(X, [_ | Tail]) :- my_member(X, Tail).<br /><br />main(!IO) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando add<br /> &nbsp;&nbsp;&nbsp;&nbsp;add(3, 4, Sum),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es: ", !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_int(Sum, !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.nl(!IO),<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando is_even<br /> &nbsp;&nbsp;&nbsp;&nbsp;( if is_even(Sum) then<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es par\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;else<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es impar\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;),<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando list.member<br /> &nbsp;&nbsp;&nbsp;&nbsp;List = [1, 2, 3, 4],<br /> &nbsp;&nbsp;&nbsp;&nbsp;( if list.member(3, List) then<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("3 está en la lista\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;else<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("3 no está en la lista\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;).<br /></code>
+								</pre>
 							</div>
-							<p>
-								Este ejemplo demuestra cómo resolver criptogramas aritméticos en Mercury, un lenguaje de programación lógico y funcional. Los criptogramas aritméticos consisten en ecuaciones donde los operadores están representados por letras y los operandos son números. El objetivo es encontrar valores para las variables que satisfacen todas las ecuaciones dadas.
-							</p>
-							<div class="code-container">
-							<pre>
-							<code>:- module crypt.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module list, int, string.<br /><br />% Predicado principal<br />main(!IO) :-<br /> % Ecuaciones del criptograma<br /> Equations = [[dog, plus, ant, equals, cat], [420, plus, 531, equals, 951]],<br /><br /> % Resolver las ecuaciones<br /> solve(Equations,!IO).<br /><br />% Función para resolver las ecuaciones<br />solve([], _).<br />solve([Equation|Rest], IO) :-<br /> ( if Equation = [X, op, Y, equals, Z] then<br /> find(X, Y, Z, Rest, IO)<br /> else<br /> solve(Rest, IO)).<br /><br />% Función auxiliar para buscar soluciones<br %>find(X, Y, Z, Equations, IO) :-<br %>find(X, Y, Z, Equations, IO, []).<br %>find(_, _, _, [], _).<br %>find(X, Y, Z, [Equation|Rest], IO, Visited) :-<br %> ( if member(Equation, Visited) then<br %> fail<br %> else<br %> ( if Equation = [X, op, Y, equals, Z] then<br %> true<br %> else<br %> find(X, Y, Z, Rest, IO, [Equation|Visited]))<br %> ).<br /></code>
-							</pre>
-							</div>	
-							<p>
 								Este ejemplo demuestra cómo declarar y usar variables en Mercury, un lenguaje de programación lógico y funcional. Se presentan ejemplos de variables enteras, flotantes, cadenas y listas, y se muestran cómo se pueden usar para realizar operaciones básicas de entrada y salida.
 							</p>
 							<div class="code-container">
