@@ -178,13 +178,13 @@
 
                     <h4>Actores</h4>
 
-                    <p><b>Flujo de datos:</b> Son datos que se van modificando cada cierto tiempo, y que puede tener interés observar en tiempo real.</p>
+                    <p><b>Flujo de datos:</b> Son datos que se van modificando cada cierto tiempo, y que puede tener interés observar en tiempo real. A diferencia de los procesos por lotes, donde los datos se recopilan y procesan en bloques, el data streaming permite la ingestión y procesamiento continuo de datos a medida que estos se generan.</p>
                     <p><b>Observable:</b> Un componente que puede ser observado, y que se encargará de informar cuando ese flujo de datos se modifique.</p>
                     <p><b>Observador:</b> Es el elemento que observa esas modificaciones. Cuando el dato se modifica, se notifica al componente que lo está utilizando.
                         Normalmente este observer necesita suscribirse cuando quiere empezar a recibir datos, y desuscribirse cuando ya no le interesan más esos datos.
                     </p>
                     <p><b>Dispatchers:</b> En cada framework de programación reactiva se llaman de una forma distinta, pero básicamente son un conjunto de hilos donde se van a ejecutar las operaciones, y unas reglas que optimizan su uso para ser lo más eficientes posibles.</p>
-                    <p><b>Operadores:</b> Existen montones de operadores que nos permiten modificar y combinar flujos de datos, y conocerlos todos es muy complicado. Dependen de las librerías.</p>
+                    <p><b>Operadores:</b> Son funciones que se aplican a streams de datos haciendo uso de la programación funcional. Implementan soluciones a problemas comunes en el procesamiento de streams como agregar, filtrar, mapear. Existen montones de operadores que nos permiten modificar y combinar flujos de datos, y conocerlos todos es muy complicado. Dependen de las librerías.</p>
 
                     <hr>
 
@@ -302,6 +302,8 @@
 
                     <p>Para manejar estas situaciones en la programación reactiva se han establecido los siguientes mecanismos: Los suscriptores pueden indicar el número de datos que quieren o pueden procesar, de manera que el notificador nunca les enviará más de n cantidad de elementos. Los notificadores pueden aplicar diferentes operaciones como buffers o descartar algunos datos, para evitar saturar a los suscriptores lentos.</p>
                     
+                    <p>Backpressure es una solución que implementa el modelo Pull o el patrón de diseño Iterador. Así, hoy día el patrón la programación reactiva implementa dos patrones de diseño : Observer e Iterador</p>
+                    
                     <h4>Implementación</h4>
 
                     <p>Lograr los comportamientos que se logran de forma fácil en el paradigma reactivo, resultan muy complicados y con el uso de artefactos complicados en otros paradigmas de programación.</p>
@@ -368,6 +370,20 @@
                             David Karnok</a> en el año 2016, la cual se describe a continuación:
                     </p>
 
+                    <hr>
+
+                    <h4>Orígenes</h4>
+                    <p>
+                        En las primeras aplicaciones de GUI, la interfaz se actualizaba solo después de una acción del usuario, 
+                        como hacer clic en un botón. El núcleo de la aplicación era un bucle de eventos que esperaba sincrónicamente la 
+                        entrada del usuario, lo que hacía que la aplicación se colgara si no había interacción.
+                        <br><br>
+
+                        La solución es desacoplar el manejo de eventos de la actualización de la GUI, utilizando una cola de eventos 
+                        y un procesamiento paralelo. En este patrón productor-consumidor, un hilo maneja la entrada del usuario y coloca 
+                        eventos en la cola, mientras otro hilo consume estos eventos y actualiza la GUI.
+
+                    </p>
                     <hr>
 
                     <h4>Generación 0</h4>
@@ -470,6 +486,15 @@
 
                     <h4>Programación Funcional Reactiva (FRP)</h4>
 
+                    <p>Es un paradigma de programación que combina los principios
+                         de la programación funcional con el manejo de datos que cambian a lo largo del tiempo de manera 
+                         continua. En lugar de trabajar con valores discretos emitidos a lo largo del tiempo, como en la 
+                         programación reactiva tradicional, la FRP se enfoca en representar y manipular valores que pueden 
+                         variar continuamente. Este enfoque permite describir comportamientos dinámicos y sistemas interactivos
+                          de forma declarativa, facilitando el desarrollo de aplicaciones como animaciones, simulaciones y 
+                         gráficos interactivos.
+                        </p>
+
                     <p>
                         Fue definida en 1997 por <a href="http://conal.net/">Conal Elliott</a> y Paul Hudak. De
                         acuerdo con una presentación que Elliott dio en el año 2015, titulada "The essence and
@@ -499,6 +524,50 @@
                     </p>
 
                     <hr>
+
+                    <h4>Operadores sobre Streams reactivos</h4>
+
+                    <h5>
+                        Operadores de creación
+                    </h5>
+
+                    <p>
+                        <b>of:</b> Crea un stream a partir de una lista de elementos.
+
+                    </p>
+                    <p>
+                        <b>from:</b> Convierte varios tipos de datos (arrays, promesas, iterables) en streams.
+                    </p>
+                    <p>
+                        <b>interval:</b> Emite números secuenciales a intervalos de tiempo específicos.
+                    </p>
+
+                    <p>
+                        <b>timer:</b> Emite un valor después de un tiempo determinado.
+                    </p>
+
+                    <h5>Operadores de join</h5>
+
+                    <p><b>merge:</b> Combina múltiples streams emitiendo todos los valores a medida que ocurren.</p>
+                    <p><b>concat:</b> Emite todos los valores de un stream y luego continúa con el siguiente.</p>
+                    <p><b>combineLatest:</b> Combina múltiples streams emitiendo el último valor de cada uno cada vez que uno de los streams emite.</p>
+                    <p><b>zip:</b> Combina valores de múltiples streams en forma de tuplas, emitiendo cada vez que cada stream ha emitido un valor.</p>
+
+                    <h5>Operadores de transformación</h5>
+
+                    <p><b>map:</b> Aplica una función a cada valor emitido por el stream.</p>
+                    <p><b>scan:</b> Acumula valores emitidos utilizando una función acumuladora, similar a <code>reduce</code> en arreglos.</p>
+                    <p><b>buffer:</b> Agrupa los valores emitidos en arrays.</p>
+
+                    <h5>Operadores de filtrado</h5>
+                    <p><b>filter:</b> Emite solo los valores que cumplen con una condición específica.</p>
+                    <p><b>debounceTime:</b> Emite un valor solo si ha pasado una cierta cantidad de tiempo desde la última emisión.</p>
+                    <p><b>distinctUntilChanged:</b> Emite valores solo si son diferentes del valor anterior.</p>
+
+                    <h5>Operadores de multicasting</h5>
+                    <p><b>share:</b> Convierte un stream en un stream multicast compartido entre suscriptores.</p>
+                    <p><b>publish:</b> Convierte un stream en un connectable observable que puede ser controlado cuándo empezar a emitir.</p>
+                    <p><b>refCount:</b> Convierte un connectable observable en un observable regular que se suscribe y se desuscribe automáticamente basado en la cantidad de suscriptores.</p>
 
                     <h4>Sistemas reactivos</h4>
 
@@ -949,6 +1018,27 @@
                             <strong>¿Cuando usar la programación reactiva?</strong>
 
                             <p>De manera general, la programación reactiva se implementa cuando una aplicación maneje un gran flujo de datos o tenga muchas fuentes de datos y que requiera de alguna manera la propagación de cambio en datos modulos y eventos., sin la programación reactiva estas aplicaciones pueden tener problemas relacionados a la sincronización de los datos y como se muestran en la interfaz grafica. Es comun usar la programación reactiva a la par con la programación orientada a objetos en casos donde la programación asincróna se vuelve dificil de entender y mantener. Es importante mencionar la concurrencia, tema en el cual partes de un programa son ejecutadas con cierta regularidad en desorden o en un orden parcial, estos se pueden comunicar entre ellos mientras se estan ejecutando, con la programación reactiva se mejora la concurrencia de las aplicaciones creando modelos asíncrono, no bloqueantes.</p>
+
+                            <strong>Testing de Software</strong>
+
+                            <p><b>Mocks y Stubs Reactivos:</b> En lugar de utilizar mocks tradicionales que imitan comportamientos estáticos, 
+                                se pueden emplear mocks reactivos que emulen flujos de eventos dinámicos. Esto permite simular condiciones reales 
+                                y complejas de manera más cercana.</p>
+
+                            <p><b>Testing de Streams y Flujos de Datos:</b> Dado que la FRP se centra en la manipulación de flujos de datos continuos, 
+                                es útil para probar cómo los programas reaccionan a cambios en estos flujos. Los frameworks y herramientas diseñados para FRP
+                                 facilitan la creación y manipulación de estos flujos durante el testing.</p>
+
+                            <p><b>Propiedades y Leyes de Comportamiento:</b> La FRP promueve el diseño de programas en términos de propiedades y leyes de 
+                                comportamiento, en lugar de pruebas unitarias tradicionales. Esto facilita la especificación y verificación de comportamientos
+                                 complejos a lo largo del tiempo.</p>
+
+                            <p><b>Testing de Interacciones Complejas:</b> En aplicaciones donde múltiples eventos y estados deben coordinarse de manera precisa,
+                                 la FRP proporciona herramientas para modelar y verificar estas interacciones de manera declarativa y concisa.</p>
+
+                            <p><b>Simulación de Entornos Dinámicos:</b> Al simular entornos dinámicos y eventos impredecibles, la FRP puede ayudar a asegurar que
+                                 los programas reaccionen de manera correcta y predecible ante situaciones reales.</p>
+
 
                             <strong>Algunos casos de uso moderno</strong>
 
