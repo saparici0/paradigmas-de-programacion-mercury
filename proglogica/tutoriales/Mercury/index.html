@@ -163,6 +163,68 @@
 									<code>:- module hello.<br>:- interface.<br>:- import_module io.<br><br>:- pred main(io::di, io::uo) is det.<br><br>:- implementation.<br><br>main(!IO) :-<br>   io.write_string("Hello World!", !IO).<br></code>
 								</pre>
 							</div>
+							<li><a href="https://glot.io/snippets/gx8qas6ogn" target="_blank" rel="noopener noreferrer">tipos.m</a></li>
+							<br>
+							<p>
+							    Veamos un ejemplo de código en Mercury donde se ilustra la manipulación de tipos y la conversión de valores. Este ejemplo demuestra cómo manejar la conversión de tipos en Mercury y evita errores comunes relacionados con tipos al implementar un sistema básico de impresión de cadenas.
+							</p>
+							<div class="code-container">
+								<pre>
+									<code>:- module tipos.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module string.<br /><br />:- pred ejemplo_predicado(int::in, string::out) is det.<br />ejemplo_predicado(X, Y) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Esto sería un error de tipo en Mercury<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Y = X + "hola".<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Forma correcta con conversión explícita<br /> &nbsp;&nbsp;&nbsp;&nbsp;Y = string.from_int(X) ++ " hola".<br /><br />main(!IO) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;T = 1,<br /> &nbsp;&nbsp;&nbsp;&nbsp;% No puedo asignar otro tipo a una variable creada<br /> &nbsp;&nbsp;&nbsp;&nbsp;% T = "hola",<br /> &nbsp;&nbsp;&nbsp;&nbsp;% T = 2,<br /> &nbsp;&nbsp;&nbsp;&nbsp;ejemplo_predicado(42, Resultado),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_string(Resultado, !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.nl(!IO).<br /></code>
+								</pre>
+							</div>
+							<li><a href="https://glot.io/snippets/gx8qbih9os" target="_blank" rel="noopener noreferrer">det_semidet.m</a></li>
+							<br>
+							<p>
+							    Este ejemplo en Mercury demuestra el uso de predicados deterministas y semideterministas para realizar operaciones aritméticas y verificar propiedades de los elementos en una lista.
+							    El código muestra cómo sumar dos números, verificar si un número es par y comprobar la membresía de un elemento en una lista.
+							</p>
+							<div class="code-container">
+								<pre>
+									<code>:- module det_semidet.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module int, list.<br /><br />% Predicado determinista: add<br />:- pred add(int::in, int::in, int::out) is det.<br />add(X, Y, Z) :- Z = X + Y.<br /><br />% Predicado semideterminista: is_even<br />:- pred is_even(int::in) is semidet.<br />is_even(X) :- X mod 2 = 0.<br /><br />% Predicado semideterminista: my_member<br />:- pred my_member(int::in, list(int)::in) is semidet.<br />my_member(X, [X | _]).<br />my_member(X, [_ | Tail]) :- my_member(X, Tail).<br /><br />main(!IO) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando add<br /> &nbsp;&nbsp;&nbsp;&nbsp;add(3, 4, Sum),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es: ", !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_int(Sum, !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.nl(!IO),<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando is_even<br /> &nbsp;&nbsp;&nbsp;&nbsp;( if is_even(Sum) then<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es par\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;else<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es impar\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;),<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando list.member<br /> &nbsp;&nbsp;&nbsp;&nbsp;List = [1, 2, 3, 4],<br /> &nbsp;&nbsp;&nbsp;&nbsp;( if list.member(3, List) then<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("3 está en la lista\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;else<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("3 no está en la lista\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;).<br /></code>
+								</pre>
+							</div>
+							<li><a href="https://glot.io/snippets/gx8qcbkfmf" target="_blank" rel="noopener noreferrer">variables.m</a></li>
+							<br>
+							<p>
+								Este ejemplo demuestra cómo declarar y usar variables en Mercury, un lenguaje de programación lógico y funcional. Se presentan ejemplos de variables enteras, flotantes, cadenas y listas, y se muestran cómo se pueden usar para realizar operaciones básicas de entrada y salida.
+							</p>
+							<div class="code-container">
+								<pre>							
+									<code>:- module variables.<br />:- interface.<br />:- import_module io.<br /><br />% Predicado principal<br />:- pred main(io::di, io::uo) is det.<br /><br />% Implementación del módulo<br />:- implementation.<br />:- import_module list.<br /><br />main(!IO) :-<br />    % Declaración de variables<br />    IntVar = 42,<br />    FloatVar = 3.14,<br />    StringVar = "Hola, Mercury",<br />    ListVar = [1, 2, 3, 4, 5],<br /><br />    % Uso de variables y salida<br />    io.write_string("Valor de IntVar: ", !IO),<br />    io.write_int(IntVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de FloatVar: ", !IO),<br />    io.write_float(FloatVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de StringVar: ", !IO),<br />    io.write_string(StringVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valores de ListVar: ", !IO),<br />    io.write_list(ListVar, ", ", io.write_int, !IO),<br />    io.nl(!IO).<br /></code>							
+								</pre>
+							</div>
+							<li><a href="https://glot.io/snippets/gx8pd7g4vm" target="_blank" rel="noopener noreferrer">factorial.m</a></li>
+							<br>
+							<p>
+								Este ejemplo implementa el algoritmo de factorial dado un input n.
+							</p>
+							<div class="code-container">
+								<pre>
+    								<code>:- module factorial.<br>:- interface.<br>:- import_module io.<br>:- pred main(io::di, io::uo) is det.<br><br>:- implementation.<br>:- import_module int.<br><br>main(!IO) :-<br>    factorial(10, Result),<br>    io.write_string("Factorial de 10 es: ", !IO),<br>    io.write_int(Result, !IO),<br>    io.nl(!IO).<br><br>:- pred factorial(int::in, int::out) is det.<br>factorial(N, Result) :-<br>    ( if N = 0 then<br>        Result = 1<br>    else<br>        factorial(N - 1, SubResult),<br>        Result = N * SubResult<br>    ).<br></code>
+								</pre>
+							</div>
+							<li><a href="https://glot.io/snippets/gx8pgqql3e" target="_blank" rel="noopener noreferrer">suma.m</a></li>
+							<br>
+							<p>
+								Este ejemplo implementamos un algoritmo de logica pura. En este caso es un programa simple para sumar dos números enteros introducidos por el usuario.
+							</p>
+							<div class="code-container">
+								<pre>
+    								<code>% Definición del módulo<br>:- module suma.<br><br>% Declaración de la interfaz<br>:- interface.<br><br>% Importar el módulo io en la interfaz<br>:- import_module io.<br>% Declaración del predicado suma<br>:- pred suma(int::in, int::in, int::out) is det.<br><br>% Declaración del predicado main<br>:- pred main(io::di, io::uo) is det.<br><br>% Sección de implementación<br>:- implementation.<br><br>% Importar los módulos necesarios<br>:- import_module int.<br>:- import_module string.<br>:- import_module list.<br><br>% Implementación del predicado suma/3<br>suma(X, Y, Resultado) :-<br>    Resultado = X + Y.<br><br>% Implementación del predicado main/2<br>main(!IO) :-<br>    io.read_line_as_string(Result1, !IO),<br>    (<br>        Result1 = ok(Line1),<br>        ( string.to_int(string.strip(Line1), X) -&gt;<br>            io.read_line_as_string(Result2, !IO),<br>            (<br>                Result2 = ok(Line2),<br>                ( string.to_int(string.strip(Line2), Y) -&gt;<br>                    suma(X, Y, Resultado),<br>                    io.format("La suma de %d y %d es %d\n", [i(X), i(Y), i(Resultado)], !IO)<br>                ;<br>                    io.write_string("Error: El segundo valor ingresado no es un número válido.\n", !IO)<br>                )<br>            ;<br>                Result2 = eof,<br>                io.write_string("Error: Fin de entrada inesperado al leer el segundo número.\n", !IO)<br>            ;<br>                Result2 = error(Error),<br>                io.format("Error al leer el segundo número: %s\n", [s(io.error_message(Error))], !IO)<br>            )<br>        ;<br>            io.write_string("Error: El primer valor ingresado no es un número válido.\n", !IO)<br>        )<br>    ;<br>        Result1 = eof,<br>        io.write_string("Error: Fin de entrada inesperado al leer el primer número.\n", !IO)<br>    ;<br>        Result1 = error(Error),<br>        io.format("Error al leer el primer número: %s\n", [s(io.error_message(Error))], !IO)<br>    ).<br></code>
+								</pre>
+							</div>
+							<li><a href="https://glot.io/snippets/gx8psfco8o" target="_blank" rel="noopener noreferrer">trash.m</a></li>
+							<br>
+							<p>
+								El siguiente es un ejemplo de como Mercury implementa la recolección de basura mediante la gestión automática de la memoria.
+							</p>
+							<div class="code-container">
+								<pre>
+    									<code>:- module trash.<br>:- interface.<br>:- import_module io.<br><br>:- pred main(io::di, io::uo) is det.<br><br>:- implementation.<br>:- import_module list.<br>:- import_module int. % Importamos el módulo int para operadores aritméticos y relacionales<br><br>% Definimos un tipo simple que encapsula un entero<br>:- type my_data ---&gt; data(int).<br><br>% Una función que crea una lista de 'my_data' con n elementos<br>:- func create_data_list(int) = list(my_data).<br><br>create_data_list(N) = (if N =&lt; 0 then [] else [data(N) | create_data_list(N - 1)]).<br><br>% Una función que procesa la lista y la convierte en una lista de enteros<br>:- func process_data_list(list(my_data)) = list(int).<br><br>process_data_list([]) = [].<br>process_data_list([data(X) | Xs]) = [X | process_data_list(Xs)].<br><br>main(!IO) :-<br>    % Creamos una lista de 10 elementos<br>    DataList = create_data_list(10),<br>    % Procesamos la lista<br>    IntList = process_data_list(DataList),<br>    % Imprimimos la lista procesada<br>    io.write_list(IntList, ", ", io.write_int, !IO),<br>    io.nl(!IO),<br>    % En este punto, DataList y IntList ya no son necesarios y el recolector de basura<br>    % se encargará de liberar la memoria asociada a estas estructuras.<br>    io.write_string("Memory has been managed automatically by the garbage collector.", !IO),<br>    io.nl(!IO).<br></code>
+								</pre>
+
+							</div>
 							<li><a href="https://glot.io/snippets/gx6e5r6rq5" target="_blank" rel="noopener noreferrer">addc.m</a></li>
 							<br>
 							<p>
@@ -190,85 +252,15 @@
 									<code>:- module puzzle.<br>:- interface.<br>:- import_module io.<br>:- pred main(io::di, io::uo) is det.<br>:- implementation.<br>:- import_module list, string, solutions.<br><br>% especificacion de los tipos de datos y los valores posibles<br>:- type origenes ---> ingles; japones; espanol.<br>:- type colores ---> rojo; azul; verde.<br>:- type mascotas ---> jaguar; caracol; cebra.<br>:- type casa<br>    --->    casa(<br>                origen :: origenes,<br>                color :: colores,<br>                mascota :: mascotas<br>            ).<br><br>% funcion para determinar que dos casas no sean iguales<br>:- pred distinct(casa::in, casa::in) is semidet.<br>distinct(casa(O1, C1, M1), casa(O2, C2, M2)) :-<br>    not (O1 = O2; C1 = C2; M1 = M2).<br><br>:- pred fila(list(casa)::out) is nondet.<br>fila([X, Y, Z]) :-<br>    casa(X), casa(Y), casa(Z),<br>    % los japoneses viven a la derecha del cuidador de caracoles<br>    X^mascota = caracol     <=> Y^origen = japones,<br>    Y^mascota = caracol     <=> Z^origen = japones,<br>    % el cuidador de los caracoles vive a la izquierda de la casa azul<br>    Z^color = azul          <=> Y^mascota = caracol,<br>    Y^color = azul          <=> X^mascota = caracol,<br>    % los japoneses viven a la derecha del cuidador de caracoles<br>    not X^origen = japones,<br>    % el cuidador de los caracoles vive a la izquierda de la casa azul<br>    not Z^mascota = caracol,<br>    distinct(X, Y), distinct(Y, Z), distinct(X, Z).<br><br>:- pred casa(casa::out) is nondet.<br>casa(casa(O, C, M)) :-<br>    % verificamos que los datos de la casa son validos<br>    origen(O), color(C), mascota(M),<br>    % el ingles vive en la casa roja<br>    O = ingles <=> C = rojo,<br>    % el jaguar es la mascota de la familia española<br>    O = espanol <=> M = jaguar,<br>    % los japoneses viven a la dereca del cuidador de caracoles<br>    not (O = japones, M = caracol),<br>    % el cuidador de caracoles vive a la izquierda de la casa azul<br>    not (M = caracol, C = azul).<br><br>main(!IO) :-<br>    solutions(fila, Soluciones),<br>    ( if Soluciones = [] then<br>        io.write_string("Sin solucion.\n", !IO)<br>    else<br>        foldl((pred(L::in, !.IO::di, !:IO::uo) is det :-<br>            io.print(L, !IO),<br>            io.nl(!IO)), Soluciones, !IO)<br>    ).<br><br>:- pred origen(origenes::out) is multi.<br>origen(ingles).<br>origen(japones).<br>origen(espanol).<br><br>:- pred color(colores).<br>:- mode color(out) is multi.<br>:- mode color(in) is det.<br>color(rojo).<br>color(azul).<br>color(verde).<br><br>:- pred mascota(mascotas::out) is multi.<br>mascota(jaguar).<br>mascota(caracol).<br>mascota(cebra).<br></code>
 								</pre>
 							</div>
-							<br />
-							<p>
-								Ahora miremos con detalle los algoritmos y su ejecución en Mercury.
-							</p>
-							<br />
-							<p>
-								Este ejemplo implementa el algoritmo de factorial dado un input n.
-							</p>
-							<div class="code-container">
-								<pre>
-    									<code>:- module main.<br>:- interface.<br>:- import_module io.<br>:- pred main(io::di, io::uo) is det.<br><br>:- implementation.<br>:- import_module int.<br><br>main(!IO) :-<br>    factorial(10, Result),<br>    io.write_string("Factorial de 10 es: ", !IO),<br>    io.write_int(Result, !IO),<br>    io.nl(!if().<br><br>:- pred factorial(int::in, int::out) is det.<br>factorial(N, Result) :-<br>    ( if N = 0 then<br>        Result = 1<br>    else<br>        factorial(N - 1, SubResult),<br>        Result = N * SubResult<br>    ).<br></code>
-								</pre>
-
-							</div>
-							<br />
-							<p>
-								Este ejemplo implementamos un algoritmo de logica pura. En este caso es un programa simple para sumar dos números enteros introducidos por el usuario.
-							</p>
-							<div class="code-container">
-								<pre>
-    									<code>% Definición del módulo<br>:- module main.<br><br>% Declaración de la interfaz<br>:- interface.<br><br>% Importar el módulo io en la interfaz<br>:- import_module io.<hr>:- pred suma(int::in, int::in, int::out) is det.<br><br>% Declaración del predicado main/2<br>:- pred main(io::di, io::uo) is det.<br><br>% Sección de implementación<br>:- implementation.<br><br>% Importar los módulos necesarios<br>:- import_module int.<br>:- import_module string.<br>:- import_module list.<br><br>% Implementación del predicado suma/3<br>suma(X, Y, Resultado) :-<br>    Resultado = X + Y.<br><br>% Implementación del predicado main/2<br>main(!IO) :-<br>    io.read_line_as_string(Result1, !IO),<br>    (<br>        Result1 = ok(Line1),<br>        ( string.to_int(string.strip(Line1), X) -&gt;<br>            io.read_line_as_string(Result2, !IO),<br>            (<br>                Result2 = ok(Line2),<br>                ( string.to_int(string.strip(Line2), Y) -&gt;<br>                    suma(X, Y, Resultado),<br>                    io.format("La suma de %d y %d es %d\\n", [i(X), i(Y), i(Resultado)], !IO)<br>                ;<br>                    io.write_string("Error: El segundo valor ingresado no es un número válido.\\n", !IO)<br>                )<br>            ;<br>                Result2 = eof,<br>                io.write_encadenada("Error: Fin de entrada inesperado al leer el segundo número.\\n", !IO)<br>            ;<br>                Result2 = error(Error),<br>                io.format("Error al leer el segundo número: %s\\n", [s(io.error_message(Error))], !IO)<br>            )<br>        ;<br>            io.write_string("Error: El primer valor ingresado no es un número válido.\\n", !IO)<br>        )<br>    ;<br>        Result1 = eof,<br>        io.write_string("Error: Fin de entrada inesperado al leer el primer número.\\n", !IO)<br>    ;<br>        Result1 = error(Error),<br>        io.format("Error al leer el primer número: %s\\n", [s(io.error_message(Error))], !IO)<br>    ).<br></code>
-								</pre>
-
-							</div>
+							<li><a href="https://glot.io/snippets/gx8q88pygp" target="_blank" rel="noopener noreferrer">palomar.m</a></li>
 							<br>
-							<p>
-								El siguiente es un ejemplo de como Mercury implementa la recolección de basura mediante la gestión automática de la memoria.
-							</p>
-							<div class="code-container">
-								<pre>
-    									<code>:- module main.<br>:- interface.<br>:- import_module io.<br><br>:- pred main(io::di, io::uo) is det.<br><br>:- implementation.<br>:- import_module list.<br>:- import_module int. % Importamos el módulo int para operadores aritméticos y relacionales<br><br>% Definimos un tipo simple que encapsula un entero<br>:- type my_data ---&gt; data(int).<br><br>% Una función que crea una lista de 'my_data' con n elementos<br>:- func create_data_list(int) = list(my_data).<br><br>create_data_list(N) = (if N =&lt; 0 then [] else [data(N) | create_data_list(N - 1)]).<br><br>% Una función que procesa la lista y la convierte en una lista de enteros<br>:- func process_data_list(list(my_data)) = list(int).<br><br>process_data_list([]) = [].<br>process_data_list([data(X) | Xs]) = [X | process_data_list(Xs)].<br><br>main(!IO) :-<br>    % Creamos una lista de 10 elementos<br>    DataList = create_data_list(10),<br>    % Procesamos la lista<br>    IntList = process_data_list(DataList),<br>    % Imprimimos la lista procesada<br>    io.write_list(IntList, ", ", io.write_int, !IO),<br>    io.nl(!IO),<br>    % En este punto, DataList y IntList ya no son necesarios y el recolector de basura<br>    % se encargará de liberar la memoria asociada a estas estructuras.<br>    io.write_string("Memory has been managed automatically by the garbage collector.", !IO),<br>    io.nl(!IO).<br></code>
-								</pre>
-
-							</div>
-							<br>
-							<p>
-								Este ejemplo implementa un algoritmo de ordenamiento topológico para detectar ciclos en un grafo dirigido:
-							</p>
-							<div class="code-container">
-								<pre>
-									<code>:- module topological_sort.<br>:- interface.<br>:- import_module io.<br>:- pred main(io::di, io::uo) is det.<br><br>:- implementation.<br>:- import_module list, set, map, string.<br><br>% Nodo del grafo<br>:- type node ---> a ; b ; c ; d ; e ; f ; g ; h.<br><br>% Aristas del grafo<br>:- func edges = list(pair(node, list(node))).<br>edges = [<br>    a - [b, c],<br>    b - [d],<br>    c - [d, e],<br>    d - [f],<br>    e - [f, g],<br>    f - [h],<br>    g - [h]<br>].<br><br>% Predicado principal<br>main(!IO) :-<br>    ( if topological_sort(Sorted) then<br>        io.write_string("Orden topológico: " ++ string(Sorted) ++ "\n", !IO)<br>    else<br>        io.write_string("El grafo contiene un ciclo\n", !IO)<br>    ).<br><br>% Implementación del algoritmo de ordenamiento topológico<br>:- pred topological_sort(list(node)::out) is semidet.<br>topological_sort(Sorted) :-<br>    edges(Edges),<br>    list_to_map(Edges, Graph),<br>    topological_sort_recursive(Graph, [], set.init, set.init, Sorted).<br><br>:- pred topological_sort_recursive(map(node, list(node))::in, list(node)::in, set(node)::in, set(node)::in, list(node)::out) is semidet.<br>topological_sort_recursive(Graph, Acc, TempMarked, PermMarked, Sorted) :-<br>    ( if map.is_empty(Graph) then<br>        reverse(Acc, Sorted)<br>    else<br>        map.delete_any(Graph, Node, Neighbors, RestGraph),<br>        ( if set.contains(PermMarked, Node) then<br>            topological_sort_recursive(RestGraph, Acc, TempMarked, PermMarked, Sorted)<br>        else if set.contains(TempMarked, Node) then<br>            false % Se ha encontrado un ciclo<br>        else<br>            topological_sort_visit(Node, Neighbors, RestGraph, [Node | Acc], set.insert(Node, TempMarked), PermMarked, Sorted)<br>        )<br>    ).<br><br>:- pred topological_sort_visit(node::in, list(node)::in, map(node, list(node))::in, list(node)::in, set(node)::in, set(node)::in, list(node)::out) is semidet.<br>topological_sort_visit(Node, [], Graph, Acc, TempMarked, PermMarked, Sorted) :-<br>    topological_sort_recursive(Graph, Acc, set.delete(Node, TempMarked), set.insert(Node, PermMarked), Sorted).<br>topological_sort_visit(Node, [Neighbor | Rest], Graph, Acc, TempMarked, PermMarked, Sorted) :-<br>    ( if set.contains(PermMarked, Neighbor) then<br>        topological_sort_visit(Node, Rest, Graph, Acc, TempMarked, PermMarked, Sorted)<br>    else if set.contains(TempMarked, Neighbor) then<br>        false % Se ha encontrado un ciclo<br>    else<br>        topological_sort_visit(Neighbor, map.lookup(Graph, Neighbor), Graph, Acc, set.insert(Neighbor, TempMarked), PermMarked, TempSorted),<br>        topological_sort_visit(Node, Rest, Graph, TempSorted, TempMarked, PermMarked, Sorted)<br>    ).<br><br>:- pred list_to_map(list(pair(node, list(node)))::in, map(node, list(node))::out) is det.<br>list_to_map(List, Map) :-<br>    foldl((pred(E::in, M0::in, M::out) is det :-<br>        map.det_insert(E^fst, E^snd, M0, M)<br>    ), List, map.init, Map).</code>
-								</pre>
-							</div>
-							<p>
-							    Ahora veamos un ejemplo de código en Mercury donde se ilustra la manipulación de tipos y la conversión de valores:
-							</p>
-							<p>
-							    Este ejemplo demuestra cómo manejar la conversión de tipos en Mercury y evita errores comunes relacionados con tipos al implementar un sistema básico de impresión de cadenas.
-							</p>
-							<div class="code-container">
-								<pre>
-									<code>:- module main.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module string.<br /><br />:- pred ejemplo_predicado(int::in, string::out) is det.<br />ejemplo_predicado(X, Y) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Esto sería un error de tipo en Mercury<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Y = X + "hola".<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Forma correcta con conversión explícita<br /> &nbsp;&nbsp;&nbsp;&nbsp;Y = string.from_int(X) ++ " hola".<br /><br />main(!IO) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;T = 1,<br /> &nbsp;&nbsp;&nbsp;&nbsp;% No puedo asignar otro tipo a una variable creada<br /> &nbsp;&nbsp;&nbsp;&nbsp;% T = "hola",<br /> &nbsp;&nbsp;&nbsp;&nbsp;% T = 2,<br /> &nbsp;&nbsp;&nbsp;&nbsp;ejemplo_predicado(42, Resultado),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_string(Resultado, !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.nl(!IO).<br /></code>
-								</pre>
-							</div>
-							p>
-							    Este ejemplo en Mercury demuestra el uso de predicados deterministas y semideterministas para realizar operaciones aritméticas y verificar propiedades de los elementos en una lista.
-							</p>
-							<p>
-							    El código muestra cómo sumar dos números, verificar si un número es par y comprobar la membresía de un elemento en una lista.
-							</p>
-							<div class="code-container">
-								<pre>
-									<code>:- module main.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module int, list.<br /><br />% Predicado determinista: add<br />:- pred add(int::in, int::in, int::out) is det.<br />add(X, Y, Z) :- Z = X + Y.<br /><br />% Predicado semideterminista: is_even<br />:- pred is_even(int::in) is semidet.<br />is_even(X) :- X mod 2 = 0.<br /><br />% Predicado semideterminista: my_member<br />:- pred my_member(int::in, list(int)::in) is semidet.<br />my_member(X, [X | _]).<br />my_member(X, [_ | Tail]) :- my_member(X, Tail).<br /><br />main(!IO) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando add<br /> &nbsp;&nbsp;&nbsp;&nbsp;add(3, 4, Sum),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es: ", !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.write_int(Sum, !IO),<br /> &nbsp;&nbsp;&nbsp;&nbsp;io.nl(!IO),<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando is_even<br /> &nbsp;&nbsp;&nbsp;&nbsp;( if is_even(Sum) then<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es par\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;else<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("La suma es impar\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;),<br /><br /> &nbsp;&nbsp;&nbsp;&nbsp;% Usando list.member<br /> &nbsp;&nbsp;&nbsp;&nbsp;List = [1, 2, 3, 4],<br /> &nbsp;&nbsp;&nbsp;&nbsp;( if list.member(3, List) then<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("3 está en la lista\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;else<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;io.write_string("3 no está en la lista\n", !IO)<br /> &nbsp;&nbsp;&nbsp;&nbsp;).<br /></code>
-								</pre>
-							</div>
-								Este ejemplo demuestra cómo declarar y usar variables en Mercury, un lenguaje de programación lógico y funcional. Se presentan ejemplos de variables enteras, flotantes, cadenas y listas, y se muestran cómo se pueden usar para realizar operaciones básicas de entrada y salida.
-							</p>
-							<div class="code-container">
-							<pre>							
-							<code>:- module ejemplo_variables.<br />:- interface.<br />:- import_module io.<br /><br />% Predicado principal<br />:- pred main(io::di, io::uo) is det.<br /><br />% Implementación del módulo<br />:- implementation.<br />:- import_module list.<br /><br />main(!IO) :-<br />    % Declaración de variables<br />    IntVar = 42,<br />    FloatVar = 3.14,<br />    StringVar = "Hola, Mercury",<br />    ListVar = [1, 2, 3, 4, 5],<br /><br />    % Uso de variables y salida<br />    io.write_string("Valor de IntVar: ", !IO),<br />    io.write_int(IntVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de FloatVar: ", !IO),<br />    io.write_float(FloatVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valor de StringVar: ", !IO),<br />    io.write_string(StringVar, !IO),<br />    io.nl(!IO),<br /><br />    io.write_string("Valores de ListVar: ", !IO),<br />    io.write_list(ListVar, ", ", io.write_int, !IO),<br />    io.nl(!IO).<br /></code>							
-							</pre>
-							</div>	
 							<p>
 								Este ejemplo demuestra cómo se puede simular el teorema del palomar (o principio del casillero) en Mercury. Se comprueba si hay más palomas que casilleros y se imprime un mensaje correspondiente. 
 							</p>
 							<div class="code-container">
-							<pre>
-							<code>:- module main.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module list, int, string, bool.<br /><br />% predicado que verifica el teorema del palomar<br />:- pred pigeonhole(int::in, int::in, bool::out) is det.<br />pigeonhole(N, M, Result) :-<br />    ( if N > M then<br />        Result = yes<br />    else<br />        Result = no<br />    ).<br /><br />% predicado para imprimir el resultado<br />:- pred print_result(int::in, int::in, bool::in, io::di, io::uo) is det.<br />print_result(N, M, Result, !IO) :-<br />    ( if Result = yes then<br />        io.write_string(format("%d palomas en %d casilleros: Al menos un casillero contendrá más de una paloma.\n", [i(N), i(M)]), !IO)<br />    else<br />        io.write_string(format("%d palomas en %d casilleros: Ningún casillero contendrá más de una paloma.\n", [i(N), i(M)]), !IO)<br />    ).<br /><br />main(!IO) :-<br />    % Ejemplos de prueba<br />    Pigeons1 = 10,<br />    Holes1 = 9,<br />    pigeonhole(Pigeons1, Holes1, Result1),<br />    print_result(Pigeons1, Holes1, Result1, !IO),<br /><br />    Pigeons2 = 5,<br />    Holes2 = 5,<br />    pigeonhole(Pigeons2, Holes2, Result2),<br />    print_result(Pigeons2, Holes2, Result2, !IO).<br /></code>
-							</pre>
+								<pre>
+									<code>:- module palomar.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module list, int, string, bool.<br /><br />% predicado que verifica el teorema del palomar<br />:- pred pigeonhole(int::in, int::in, bool::out) is det.<br />pigeonhole(N, M, Result) :-<br />    ( if N > M then<br />        Result = yes<br />    else<br />        Result = no<br />    ).<br /><br />% predicado para imprimir el resultado<br />:- pred print_result(int::in, int::in, bool::in, io::di, io::uo) is det.<br />print_result(N, M, Result, !IO) :-<br />    ( if Result = yes then<br />        io.write_string(format("%d palomas en %d casilleros: Al menos un casillero contendrá más de una paloma.\n", [i(N), i(M)]), !IO)<br />    else<br />        io.write_string(format("%d palomas en %d casilleros: Ningún casillero contendrá más de una paloma.\n", [i(N), i(M)]), !IO)<br />    ).<br /><br />main(!IO) :-<br />    % Ejemplos de prueba<br />    Pigeons1 = 10,<br />    Holes1 = 9,<br />    pigeonhole(Pigeons1, Holes1, Result1),<br />    print_result(Pigeons1, Holes1, Result1, !IO),<br /><br />    Pigeons2 = 5,<br />    Holes2 = 5,<br />    pigeonhole(Pigeons2, Holes2, Result2),<br />    print_result(Pigeons2, Holes2, Result2, !IO).<br /></code>
+								</pre>
 							</div>
 						</ul>
 						
@@ -284,15 +276,17 @@
 						<p>
 							Para probar código Mercury online, sugerimos visitar: <a href="https://glot.io/new/mercury" target="blank">https://glot.io/new/mercury</a>
 						</p>
+						<p>
+							Un buen curso con temas más avanzados: <a href="https://mercury-in.space/crash.html" target="blank">https://mercury-in.space/crash.html</a>
+						</p>
 						<br>
 					</section>
 					<section id="seven">
 						<p>Creado por:</p>
-						<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Juan Castelblanco <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ivan Cepeda <br>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Camilo Rodriguez <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stevan Valbuena <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Samuel Salgado <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Diego Bulla</p>
+						<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Juan Castelblanco <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ivan Cepeda <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Camilo Rodriguez <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stevan Valbuena <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Samuel Salgado <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Diego Bulla</p>
 						<p >Ejemplos adicionales por:</p>
-						<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Simón Aparicio <br></p>
+						<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Simón Aparicio <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Javier Toro <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Juliana De Castro <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; William García</p>
 					</section>
-					
 
 				<!-- Four -->
 				
