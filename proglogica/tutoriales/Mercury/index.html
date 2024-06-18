@@ -271,14 +271,13 @@
 							</pre>
 							</div>	
 							<p>
-								Este ejemplo demuestra cómo implementar el Teorema de Palomar en Mercury, un lenguaje de programación lógico y funcional. El Teorema de Palomar establece que todo número entero positivo mayor a 1 tiene al menos un divisor primo. Se presenta un predicado principal que interactúa con el usuario para verificar esta propiedad en un número dado.
+								Este ejemplo demuestra cómo se puede simular el teorema del palomar (o principio del casillero) en Mercury. Se comprueba si hay más palomas que casilleros y se imprime un mensaje correspondiente. 
 							</p>
 							<div class="code-container">
 							<pre>
-							<code>:- module palomar_theorem.<br />:- interface.<br />:- pred main(io::di, io::uo) is det.<br /><br />% Implementación del módulo<br />:- implementation.<br />:- import_module io.<br /><br />main(IO_in, IO_out) :-<br />    write("Introduzca un numero entero positivo mayor a 1: ", IO_in, IO_out),<br />    read_int(IO_in, IO_out, N),<br />    ( N > 1 -><br />        ( has_prime_divisor(N) -><br />            write("El numero tiene al menos un divisor primo.\n", IO_out)<br />        ;<br />            write("El numero no tiene divisores primos.\n", IO_out)<br />        )<br />    ;<br />        write("El numero debe ser mayor a 1.\n", IO_out)<br />    ).<br /><br />has_prime_divisor(N) :- prime_divisors(N, Divs), Divs = [_|_].<br /><br />prime_divisors(N, [N]) :- prime(N),!.<br />prime_divisors(N, Divs) :-<br />    findall(D, (between(2, N, D), prime(D), N mod D =:= 0), Divs).<br /><br />prime(N) :- \+ composite(N).<br />composite(N) :- between(2, sqrt(N), I), N mod I =:= 0.<br /><br />sqrt(X, Y) :- Y * Y =< X, (Y + 1) * (Y + 1) > X.<br /></code>
+							<code>:- module main.<br />:- interface.<br />:- import_module io.<br /><br />:- pred main(io::di, io::uo) is det.<br /><br />:- implementation.<br />:- import_module list, int, string, bool.<br /><br />% predicado que verifica el teorema del palomar<br />:- pred pigeonhole(int::in, int::in, bool::out) is det.<br />pigeonhole(N, M, Result) :-<br />    ( if N > M then<br />        Result = yes<br />    else<br />        Result = no<br />    ).<br /><br />% predicado para imprimir el resultado<br />:- pred print_result(int::in, int::in, bool::in, io::di, io::uo) is det.<br />print_result(N, M, Result, !IO) :-<br />    ( if Result = yes then<br />        io.write_string(format("%d palomas en %d casilleros: Al menos un casillero contendrá más de una paloma.\n", [i(N), i(M)]), !IO)<br />    else<br />        io.write_string(format("%d palomas en %d casilleros: Ningún casillero contendrá más de una paloma.\n", [i(N), i(M)]), !IO)<br />    ).<br /><br />main(!IO) :-<br />    % Ejemplos de prueba<br />    Pigeons1 = 10,<br />    Holes1 = 9,<br />    pigeonhole(Pigeons1, Holes1, Result1),<br />    print_result(Pigeons1, Holes1, Result1, !IO),<br /><br />    Pigeons2 = 5,<br />    Holes2 = 5,<br />    pigeonhole(Pigeons2, Holes2, Result2),<br />    print_result(Pigeons2, Holes2, Result2, !IO).<br /></code>
 							</pre>
 							</div>
-
 						</ul>
 						
 						<ul class="actions">
